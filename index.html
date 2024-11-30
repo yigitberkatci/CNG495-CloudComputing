@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccerMatch Scheduler</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <script>
+        fetch('header.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('header').innerHTML = data;
+          });
+    </script>
+    <div id="header"></div>
+    <div class="scheduler-container">
+        <h3>Date: <span id="schedule-date"></span></h3>
+        <table class="scheduler-table">
+            <thead>
+                <tr>
+                    <th>Time Slot</th>
+                    <th>Match</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="scheduler-body">
+
+            </tbody>
+        </table>
+    </div>
+    <div class="league-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Position</th>
+                    <th>Club</th>
+                    <th>Played</th>
+                    <th>Won</th>
+                    <th>Lost</th>
+                    <th>Drawn</th>
+                    <th>GF</th>
+                    <th>GA</th>
+                    <th>Win %</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <tr>
+                    <td>1</td>
+                    <td>Liverpool</td>
+                    <td>12</td>
+                    <td>10</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>24</td>
+                    <td>8</td>
+                    <td>83%</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Manchester City</td>
+                    <td>12</td>
+                    <td>9</td>
+                    <td>2</td>
+                    <td>1</td>
+                    <td>21</td>
+                    <td>7</td>
+                    <td>75%</td>
+                </tr>
+                <td>1</td>
+                <td>Liverpool</td>
+                <td>12</td>
+                <td>10</td>
+                <td>1</td>
+                <td>1</td>
+                <td>24</td>
+                <td>8</td>
+                <td>83%</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Manchester City</td>
+                <td>12</td>
+                <td>9</td>
+                <td>2</td>
+                <td>1</td>
+                <td>21</td>
+                <td>7</td>
+                <td>75%</td>
+            </tr>
+            <td>1</td>
+            <td>Liverpool</td>
+            <td>12</td>
+            <td>10</td>
+            <td>1</td>
+            <td>1</td>
+            <td>24</td>
+            <td>8</td>
+            <td>83%</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Manchester City</td>
+            <td>12</td>
+            <td>9</td>
+            <td>2</td>
+            <td>1</td>
+            <td>21</td>
+            <td>7</td>
+            <td>75%</td>
+        </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>
