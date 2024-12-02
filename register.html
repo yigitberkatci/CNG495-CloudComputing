@@ -14,22 +14,71 @@
           .then(data => {
             document.getElementById('header').innerHTML = data;
           });
+
+        //register connection
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.getElementById("registerForm");
+            form.addEventListener("submit", async function (event) {
+                event.preventDefault();
+
+                const teamName = document.getElementById("teamName").value;
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+                const confirmPassword = document.getElementById("confirmPassword").value;
+
+                if (!teamName || !email || !password || !confirmPassword) {
+                    alert("All fields are required.");
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    alert("Passwords do not match.");
+                    return;
+                }
+
+                try {
+                    const response = await fetch("http://127.0.0.1:5000/register", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            team_name: teamName,
+                            email: email,
+                            password: password,
+                        }),
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        alert(result.message); // "Registration successful"
+                        window.location.href = "login.html"; //go to login page
+                    } else {
+                        alert(result.message || "Registration failed. Please try again.");
+                    }
+                } catch (error) {
+                    console.error("Error during registration:", error);
+                    alert("An error occurred. Please try again later.");
+                }
+            });
+        });
+
     </script>
     <div id="header"></div>
     <div class="login-wrapper">
-        <form action="">
+        <form id="registerForm" action="">
             <h2>Register</h2>
             <div class="input-box">
-                <input type="text" placeholder="Team Name" required>
+                <input id="teamName" type="text" placeholder="Team Name" required>
             </div>
             <div class="input-box">
-                <input type="email" placeholder="Email" required>
+                <input id="email" type="email" placeholder="Email" required>
             </div>
             <div class="input-box">
-                <input type="password" placeholder="Password" required>
+                <input id="password" type="password" placeholder="Password" required>
             </div>
             <div class="input-box">
-                <input type="password" placeholder="Confirm Password" required>
+                <input id="confirmPassword" type="password" placeholder="Confirm Password" required>
             </div>
             <button type="submit" class="btn">Register</button>
             <div class="register-link">
