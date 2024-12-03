@@ -1,0 +1,30 @@
+                                                                                                SoccerMatch Scheduler Project
+
+Overview
+        The aim of the project is to enable users with teams to easily find opposing teams by using cloud technologies. Users registered to the system can see available match times, follow the statistics of opposing teams and their own  teams, and send requests to teams they want to play against by selecting the appropriate match time.
+
+                                                                                                Usage of Cloud Technologies
+Amazon Web Services (AWS)
+        The reason why AWS, a cloud computing platform, was chosen to be used in the project is that it offers certain technologies free of charge and has a low cost, its functionality and number of different services are high compared to other platforms, and it has a large and dynamic community globally.
+
+Amazon Relational Database Service (RDS)
+	Purpose: Information regarding teams, games, and the times when the matches are available should be stored and managed.
+	Reason for Use:
+		Provides a database environment that is both safe and expandable.
+		Ensures efficient query processing and reliable data storage.
+		Reduces the amount of labor required to maintain databases.
+
+Amazon Elastic Compute Cloud (Amazon EC2)
+	Purpose: To host and run the backend application and associated processes.
+	Reason for Use:
+		Allows for a choice of computational resources.
+		Scalable to effectively manage changing user loads.
+		Allows for reliable application hosting with little interruption.
+
+Amazon Simple Notification Service (Amazon SNS)
+	Purpose: Enables the forwarding of match requests between users via e-mail
+	Reason for Use:
+		Provides a reliable messaging service.
+		Improves communication by keeping users informed of updates and requests.
+
+
