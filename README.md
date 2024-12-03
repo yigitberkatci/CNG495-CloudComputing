@@ -25,7 +25,7 @@ SoccerMatch Scheduler is a web-based application that allows university students
 ## Setup Instructions
 
 ### 1. Clone the Repository
-- git clone https://github.com/your-username/soccermatch-scheduler.git
+- git clone https://github.com/yigitberkatci/CNG495-CloudComputing.git
 - Go to the project folder
   - cd CNG495-CloudComputing
 
