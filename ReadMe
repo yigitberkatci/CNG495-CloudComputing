@@ -26,5 +26,9 @@ Amazon Simple Notification Service (Amazon SNS)
 	Reason for Use:
 		Provides a reliable messaging service.
 		Improves communication by keeping users informed of updates and requests.
-
+												Frontend
+Soccer Match Scheduler web application has a simple user-friendly interface. The application interfaces are developed by using HTML, CSS and Javascript.
+It has responsive design which means it is suitable for both computers and mobile devices.
+It has dynamic content by using AWS systems to fetch data from the backend in real time.
+It has user authentication pages which are register and login pages.
 
