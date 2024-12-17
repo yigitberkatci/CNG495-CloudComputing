@@ -8,8 +8,8 @@ senderName = "Soccer Match Scheduler"
 
 receiver = "kutay.oren@metu.edu.tr"
 
-stmp_username = "AKIA2LIP2CXYVA5GFXXT"
-stmp_password = "BBhTWoAuwxVDGI8jOEPz055teLhEV/YhyNw71TUs2tIT"
+stmp_username = "username"
+stmp_password = "password"
 
 # config_set = "ConfigSet"
 HOST = "email-smtp.eu-north-1.amazonaws.com"
