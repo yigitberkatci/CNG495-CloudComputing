@@ -50,6 +50,9 @@ SoccerMatch Scheduler is a web-based application that allows university students
   - python -m http.server 8000
 - Open http://127.0.0.1:8000/login.html 
 
+## Details
+Please refer to reports directory for details of the project evaluation.
+
 ## Contact
 - Email
   - ilgin.savas@gmail.com
