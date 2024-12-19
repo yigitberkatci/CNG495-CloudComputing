@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from db_config import get_db_connection
 from hashlib import sha256
 from flask_cors import CORS
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -97,6 +98,63 @@ def register():
 
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+@app.route("/booking", method=['POST'])
+def booking():
+    try:
+        data = request.get_json()
+        team1 = data.get('team1')
+        team2 = data.get('team2')
+        timeslot = data.get('timeslot')
+        type = "Match Invite"
 
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        if team2 == None:
+            msg = f"Team {team1} is looking for opponents!"
+
+            # get ID of team1
+            query = "SELECT TeamID FROM Team WHERE Name = %s"
+            cursor.execute(query, (team1,))
+            team1ID = cursor.fetchone()
+
+            #get timeslot ID
+            query = "SELECT TimeSlotID FROM TimeSlot WHERE StartTime = %s"
+            cursor.execute(query, (timeslot,))
+            timeslotID = cursor.fetchone()
+
+            # insert into notification
+            query = "INSERT INTO Notification (SenderID, Message, TimeSlotID, Date, NotificationType) VALUES (%s, %s, %s, %s, %s)"
+            values = (team1ID, msg, timeslotID, datetime.now(), type)
+        else:
+            msg = f"Team {team1} want to play a match for you!"
+
+            # get IDs of teams
+            query = "SELECT TeamID FROM Team WHERE Name = %s"
+            cursor.execute(query, (team1,))
+            team1ID = cursor.fetchone()
+
+            query = "SELECT TeamID FROM Team WHERE Name = %s"
+            cursor.execute(query, (team2,))
+            team2ID = cursor.fetchone()
+
+            # get timeslot ID
+            query = "SELECT TimeSlotID FROM TimeSlot WHERE StartTime = %s"
+            cursor.execute(query, (timeslot,))
+            timeslotID = cursor.fetchone()
+
+            # insert into notification
+            query = "INSERT INTO Notification (SenderID, ReceiverID, TimeSlotID, Message, Date, NotificationType) VALUES (%s, %s, %s, %s, %s, %s)"
+            values = (team1ID, team2ID, timeslotID, msg, datetime.now(), type)
+
+        cursor.execute(query, values)
+        connection.commit()
+
+        #send an email
+        #will be added later on
+
+        return jsonify({"success": True, "message": "Registration successful"}), 201
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
