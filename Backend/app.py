@@ -3,6 +3,7 @@ from db_config import get_db_connection
 from hashlib import sha256
 from flask_cors import CORS
 from datetime import datetime
+from AmazonSES.emailService import emailService
 
 app = Flask(__name__)
 CORS(app)
@@ -11,13 +12,28 @@ CORS(app)
 def index():
     return "SoccerMatch Scheduler API is running!"
 
-"""@app.route('/timeslot', methods=['GET'])
+@app.route('/timeslot', methods=['GET'])
 def get_timeslot():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)  #data as dictionary
 
-        query = "SELECT * FROM TimeSlot"
+        query = """
+                SELECT 
+                    ts.TimeSlotID,
+                    ts.StartTime,
+                    ts.EndTime,
+                    ts.IsBooked,
+                    ts.MatchID,
+                    t1.Name AS Team1Name,
+                    t2.Name AS Team2Name
+                FROM TimeSlot ts
+                LEFT JOIN SoccerMatch sm ON ts.MatchID = sm.MatchID
+                LEFT JOIN Team t1 ON sm.Team1ID = t1.TeamID
+                LEFT JOIN Team t2 ON sm.Team2ID = t2.TeamID
+                WHERE ts.IsBooked = TRUE
+                ORDER BY ts.StartTime;
+                """
         cursor.execute(query)
         timeslots = cursor.fetchall()
 
@@ -26,7 +42,7 @@ def get_timeslot():
 
         return jsonify({"success": True, "data": timeslots}), 200
     except Exception as e:
-        return jsonify({"success": False, "error": str(e)}), 500"""
+        return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -98,63 +114,118 @@ def register():
 
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
-@app.route("/booking", method=['POST'])
+@app.route("/booking", methods=['POST'])
 def booking():
+    service = emailService()
     try:
         data = request.get_json()
         team1 = data.get('team1')
         team2 = data.get('team2')
         timeslot = data.get('timeslot')
-        type = "Match Invite"
+
+        match_details = {
+            "date": datetime.now(),
+            "time": datetime.now().time(),
+            "team1": team1,
+            "team2": team2  # Optional for generalRequest
+        }
 
         connection = get_db_connection()
         cursor = connection.cursor()
 
-        if team2 == None:
+        if team2 is None:  # General request
+            type = "generalRequest"
             msg = f"Team {team1} is looking for opponents!"
 
-            # get ID of team1
+            # Get ID of team1
             query = "SELECT TeamID FROM Team WHERE Name = %s"
             cursor.execute(query, (team1,))
             team1ID = cursor.fetchone()
+            if team1ID:
+                team1ID = team1ID[0]  # Extract value from tuple
+            else:
+                return jsonify({"success": False, "error": "Team1 not found"}), 400
 
-            #get timeslot ID
+            # Get TimeSlot ID
             query = "SELECT TimeSlotID FROM TimeSlot WHERE StartTime = %s"
             cursor.execute(query, (timeslot,))
             timeslotID = cursor.fetchone()
+            if timeslotID:
+                timeslotID = timeslotID[0]  # Extract value from tuple
+            else:
+                return jsonify({"success": False, "error": "Timeslot not found"}), 400
 
-            # insert into notification
+            # Get all email addresses
+            query2 = "SELECT Email FROM Team"
+            cursor.execute(query2)
+            receiverEmails = [email[0] for email in cursor.fetchall()]  # Extract emails as a list
+
+            # Send the email to all teams
+            for receiverEmail in receiverEmails:
+                service.sendMessage(type, receiverEmail, match_details)
+
+            # Insert into Notification table
             query = "INSERT INTO Notification (SenderID, Message, TimeSlotID, Date, NotificationType) VALUES (%s, %s, %s, %s, %s)"
             values = (team1ID, msg, timeslotID, datetime.now(), type)
-        else:
-            msg = f"Team {team1} want to play a match for you!"
 
-            # get IDs of teams
+        else:  # Special request
+            type = "specialRequest"
+            msg = f"Team {team1} wants to play a match with your team!"
+
+            # Get IDs of both teams
             query = "SELECT TeamID FROM Team WHERE Name = %s"
             cursor.execute(query, (team1,))
             team1ID = cursor.fetchone()
+            if team1ID:
+                team1ID = team1ID[0]  # Extract value from tuple
+            else:
+                return jsonify({"success": False, "error": "Team1 not found"}), 400
 
-            query = "SELECT TeamID FROM Team WHERE Name = %s"
             cursor.execute(query, (team2,))
             team2ID = cursor.fetchone()
+            if team2ID:
+                team2ID = team2ID[0]  # Extract value from tuple
+            else:
+                return jsonify({"success": False, "error": "Team2 not found"}), 400
 
-            # get timeslot ID
+            # Get TimeSlot ID
             query = "SELECT TimeSlotID FROM TimeSlot WHERE StartTime = %s"
             cursor.execute(query, (timeslot,))
             timeslotID = cursor.fetchone()
+            if timeslotID:
+                timeslotID = timeslotID[0]  # Extract value from tuple
+            else:
+                return jsonify({"success": False, "error": "Timeslot not found"}), 400
 
-            # insert into notification
+            # Get email of team2
+            query = "SELECT Email FROM Team WHERE Name = %s"
+            cursor.execute(query, (team2,))
+            receiverEmail = cursor.fetchone()
+            if receiverEmail:
+                receiverEmail = receiverEmail[0]  # Extract email value
+            else:
+                return jsonify({"success": False, "error": "Receiver email not found"}), 400
+
+            # Send the email to the specific team
+            service.sendMessage(type, receiverEmail, match_details)
+
+            # Insert into Notification table
             query = "INSERT INTO Notification (SenderID, ReceiverID, TimeSlotID, Message, Date, NotificationType) VALUES (%s, %s, %s, %s, %s, %s)"
             values = (team1ID, team2ID, timeslotID, msg, datetime.now(), type)
 
+        # Execute the final insert query
         cursor.execute(query, values)
         connection.commit()
 
-        #send an email
-        #will be added later on
+        return jsonify({"success": True, "message": "Booking successful"}), 201
 
-        return jsonify({"success": True, "message": "Registration successful"}), 201
     except Exception as e:
+        print(f"Error occurred: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
+    finally:
+        cursor.close()
+        connection.close()
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

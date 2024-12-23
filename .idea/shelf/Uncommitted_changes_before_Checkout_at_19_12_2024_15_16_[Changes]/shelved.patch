@@ -1,0 +1,35 @@
+Index: Backend/app.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from flask import Flask, jsonify, request\r\nfrom db_config import get_db_connection\r\nfrom hashlib import sha256\r\nfrom flask_cors import CORS\r\n\r\napp = Flask(__name__)\r\nCORS(app)\r\n\r\n@app.route('/')\r\ndef index():\r\n    return \"SoccerMatch Scheduler API is running!\"\r\n\r\n\"\"\"@app.route('/timeslot', methods=['GET'])\r\ndef get_timeslot():\r\n    try:\r\n        connection = get_db_connection()\r\n        cursor = connection.cursor(dictionary=True)  #data as dictionary\r\n\r\n        query = \"SELECT * FROM TimeSlot\"\r\n        cursor.execute(query)\r\n        timeslots = cursor.fetchall()\r\n\r\n        cursor.close()\r\n        connection.close()\r\n\r\n        return jsonify({\"success\": True, \"data\": timeslots}), 200\r\n    except Exception as e:\r\n        return jsonify({\"success\": False, \"error\": str(e)}), 500\"\"\"\r\n\r\n@app.route('/login', methods=['POST'])\r\ndef login():\r\n    try:\r\n        data = request.get_json()\r\n        email = data.get('email')\r\n        password = data.get('password')\r\n\r\n        if not email or not password:\r\n            return jsonify({\"success\": False, \"message\": \"Email and password are required\"}), 400\r\n\r\n        connection = get_db_connection()\r\n        cursor = connection.cursor(dictionary=True)\r\n\r\n        query = \"SELECT Password FROM Team WHERE Email = %s\"\r\n        cursor.execute(query, (email,))\r\n        user = cursor.fetchone()\r\n\r\n        cursor.close()\r\n        connection.close()\r\n\r\n        if not user:\r\n            return jsonify({\"success\": False, \"message\": \"Invalid email or password\"}), 401\r\n\r\n        #hashing using SHA256\r\n        hashed_password = sha256(password.encode('utf-8')).hexdigest()\r\n\r\n        #password verify\r\n        if hashed_password != user['Password']:\r\n            return jsonify({\"success\": False, \"message\": \"Invalid email or password\"}), 401\r\n\r\n        return jsonify({\"success\": True, \"message\": \"Login successful\"}), 200\r\n\r\n    except Exception as e:\r\n        return jsonify({\"success\": False, \"error\": str(e)}), 500\r\n\r\n@app.route('/register', methods=['POST'])\r\ndef register():\r\n    try:\r\n        data = request.get_json()\r\n        team_name = data.get('team_name')\r\n        email = data.get('email')\r\n        password = data.get('password')\r\n\r\n        if not team_name or not email or not password:\r\n            return jsonify({\"success\": False, \"message\": \"Team name, email, and password are required\"}), 400\r\n\r\n        #hash with SHA256\r\n        hashed_password = sha256(password.encode('utf-8')).hexdigest()\r\n\r\n        connection = get_db_connection()\r\n        cursor = connection.cursor()\r\n\r\n        query = \"SELECT * FROM Team WHERE Email = %s\"\r\n        cursor.execute(query, (email,))\r\n        existing_user = cursor.fetchone()\r\n\r\n        if existing_user:\r\n            return jsonify({\"success\": False, \"message\": \"Email already exists\"}), 409\r\n\r\n        query = \"INSERT INTO Team (Name, Email, Password) VALUES (%s, %s, %s)\"\r\n        cursor.execute(query, (team_name, email, hashed_password))\r\n        connection.commit()\r\n\r\n        cursor.close()\r\n        connection.close()\r\n\r\n        return jsonify({\"success\": True, \"message\": \"Registration successful\"}), 201\r\n\r\n    except Exception as e:\r\n        return jsonify({\"success\": False, \"error\": str(e)}), 500\r\n\r\nif __name__ == '__main__':\r\n    app.run(host='0.0.0.0', port=5000)\r\n
+===================================================================
+diff --git a/Backend/app.py b/Backend/app.py
+--- a/Backend/app.py	(revision efc2cc3f9cdfe0bda6ff906c20d34bebbdd04202)
++++ b/Backend/app.py	(date 1734613768646)
+@@ -98,5 +98,26 @@
+     except Exception as e:
+         return jsonify({"success": False, "error": str(e)}), 500
+ 
++@app.route("/booking", method = ['POST'])
++def booking():
++    try:
++        data = request.get_json()
++        team1 = data.get("team1")
++        team2 = data.get("team2")
++        timeslot = data.get("timeslot")
++
++        if team2 == None:
++            msg = f"Team {team1} is looking for opponents!"
++        else:
++            msg = f"Team {team1} wants to play a match with you at {timeslot}"
++        #update notification table and trigger SNS
++
++        #if match is set(both opponents selected)
++        #update timeslot table
++        #update match table
++        return jsonify({"success": True, "message": "Booking successful"}), 201
++    except Exception as e:
++        return jsonify({"success": False, "error": str(e)}), 500
++
+ if __name__ == '__main__':
+     app.run(host='0.0.0.0', port=5000)
