@@ -8,7 +8,7 @@ CREATE TABLE Team (
     Password VARCHAR(255) NOT NULL,
     Ranking INT CHECK (Ranking BETWEEN 1 AND 10),
     CreationDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-    isAskingForMatch BOOLEAN NOT NULL
+    isAskingForMatch BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE TABLE SoccerMatch (
