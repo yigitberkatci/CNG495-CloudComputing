@@ -38,3 +38,31 @@ scheduleData.forEach(slot => {
 
     schedulerBody.appendChild(row);
 });
+//LIST OF TEAMS ASKING FOR MATCH
+document.addEventListener('DOMContentLoaded', function () {
+    loadMatchRequestTeams();
+});
+
+async function loadMatchRequestTeams() {
+    try {
+        const response = await fetch('/api/teams-asking-for-match');
+        const result = await response.json();
+
+        if (result.success) {
+            const teams = result.data;
+            const teamList = document.getElementById('match-request-team-list');
+            teamList.innerHTML = ''; // Clear any existing data
+
+            teams.forEach(team => {
+                const listItem = document.createElement('li');
+                listItem.textContent = team.Name;
+                teamList.appendChild(listItem);
+            });
+        } else {
+            console.error('Failed to load teams:', result.error);
+        }
+    } catch (error) {
+        console.error('Error fetching teams:', error);
+    }
+}
+
