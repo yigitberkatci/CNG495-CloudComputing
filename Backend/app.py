@@ -158,3 +158,19 @@ def booking():
         return jsonify({"success": False, "error": str(e)}), 500
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
+@app.route('/api/teams-asking-for-match', methods=['GET'])
+def get_teams_asking_for_match():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        query = "SELECT Name FROM Team WHERE isAskingForMatch = TRUE"
+        cursor.execute(query)
+        teams = cursor.fetchall()
+        cursor.close
+        connection.close
+
+        return jsonify({"success": True, "data": teams}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
