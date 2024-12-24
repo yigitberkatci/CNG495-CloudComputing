@@ -8,8 +8,8 @@ class emailService:
     def __init__(self):
         self.senderEmail = "soccermatchscheduler@gmail.com"
         self.senderName = "Soccer Match Scheduler"
-        self.stmp_username = "AKIA2LIP2CXYTJDVBHGG"
-        self.stmp_password = "BH5wZZ7ehafr83CJns+mHMFzZFCzfCvx7oteiPYjXA10"
+        self.stmp_username = ""
+        self.stmp_password = ""
         self.HOST = "email-smtp.us-east-1.amazonaws.com"
         self.PORT = 587
 
