@@ -65,4 +65,57 @@ async function loadMatchRequestTeams() {
         console.error('Error fetching teams:', error);
     }
 }
-
+//Booking PopUp
+document.addEventListener('DOMContentLoaded', () => {
+    // Get modal and elements
+    const modal = document.getElementById('booking-modal');
+    const closeModal = modal.querySelector('.close');
+    const bookingForm = document.getElementById('booking-form');
+    const timeslotInput = document.getElementById('timeslot'); // Timeslot input field in modal
+  
+    // Add event listeners to "Book Now" buttons
+    document.querySelectorAll('.book-now').forEach((button, index) => {
+      button.addEventListener('click', (event) => {
+        const timeslot = event.target.closest('tr').querySelector('td').innerText; // Get timeslot from table row
+        timeslotInput.value = timeslot; // Set timeslot value in the modal
+        modal.style.display = 'flex'; // Show the modal
+      });
+    });
+  
+    // Close modal
+    closeModal.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+  
+    // Submit booking form
+    bookingForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+  
+      const formData = new FormData(bookingForm);
+      const bookingData = {
+        team1: formData.get('team1'),
+        team2: formData.get('team2'),
+        timeslot: formData.get('timeslot'),
+      };
+  
+      try {
+        const response = await fetch('/booking', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(bookingData),
+        });
+        
+        const result = await response.json();
+        if (result.success) {
+          alert('Booking successful!');
+        } else {
+          alert('Booking failed: ' + result.error);
+        }
+      } catch (error) {
+        alert('Error submitting booking: ' + error.message);
+      }
+  
+      modal.style.display = 'none';
+    });
+  });
+  
