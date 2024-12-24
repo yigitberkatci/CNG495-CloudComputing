@@ -130,12 +130,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const timeslotInput = document.getElementById('timeslot'); // Timeslot input field in modal
   
     // Add event listeners to "Book Now" buttons
-    document.querySelectorAll('.book-now').forEach((button, index) => {
-      button.addEventListener('click', (event) => {
-        const timeslot = event.target.closest('tr').querySelector('td').innerText; // Get timeslot from table row
-        timeslotInput.value = timeslot; // Set timeslot value in the modal
-        modal.style.display = 'flex'; // Show the modal
-      });
+    document.getElementById('scheduler-body').addEventListener('click', (event) => {
+        if (event.target && event.target.classList.contains('book-now')) {
+            const timeslot = event.target.closest('tr').querySelector('td').innerText; // Get timeslot from table row
+            timeslotInput.value = timeslot; // Set timeslot value in the modal
+            modal.style.display = 'flex'; // Show the modal
+        }
     });
   
     // Close modal

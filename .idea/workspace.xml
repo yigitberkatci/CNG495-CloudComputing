@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65369a6a-bed1-458d-be00-143af3760ec2" name="Changes" comment="Find Opponent Backend implementation and Booking correction">
+    <list default="true" id="65369a6a-bed1-458d-be00-143af3760ec2" name="Changes" comment="-">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AmazonSES/emailService.py" beforeDir="false" afterPath="$PROJECT_DIR$/AmazonSES/emailService.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/db_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/db_config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/scripts.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,9 +53,9 @@
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 1
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
   <component name="ProjectId" id="2pf90NbvnX1xWDoxwA5usHBIv0S" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -108,7 +109,7 @@
       <workItem from="1734614647024" duration="3524000" />
       <workItem from="1734964159019" duration="7918000" />
       <workItem from="1734980009707" duration="3123000" />
-      <workItem from="1735040775010" duration="14597000" />
+      <workItem from="1735040775010" duration="16486000" />
     </task>
     <task id="LOCAL-00001" summary="Connection codes for Flask connection">
       <option name="closed" value="true" />
@@ -198,7 +199,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735070806003</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="-">
+      <option name="closed" value="true" />
+      <created>1735071211273</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1735071211273</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -254,9 +263,10 @@
     <MESSAGE value="Timeslot table Frontend and Backend connection" />
     <MESSAGE value="Team Information Page added" />
     <MESSAGE value="Find Opponent Backend implementation and Booking correction" />
-    <option name="LAST_COMMIT_MESSAGE" value="Find Opponent Backend implementation and Booking correction" />
+    <MESSAGE value="-" />
+    <option name="LAST_COMMIT_MESSAGE" value="-" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CNG495_CloudComputing$app.coverage" NAME="app Coverage Results" MODIFIED="1735070404637" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/CNG495_CloudComputing$app.coverage" NAME="app Coverage Results" MODIFIED="1735074190031" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
   </component>
 </project>
