@@ -313,6 +313,79 @@ def get_teams_asking_for_match():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+@app.route('/ask-for-match', methods=['POST'])
+def ask_for_match():
+    try:
+        # Get the email from the request data
+        data = request.get_json()
+        email = data.get('email')
+
+        if not email:
+            return jsonify({"success": False, "message": "Email is required"}), 400
+
+        # Connect to the database
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Update the isAskingForMatch value to TRUE for the team with the given email
+        query = "UPDATE Team SET isAskingForMatch = TRUE WHERE Email = %s"
+        cursor.execute(query, (email,))
+
+        # Check if any rows were updated
+        if cursor.rowcount == 0:
+            return jsonify({"success": False, "message": "Team not found"}), 404
+
+        # Commit the changes
+        connection.commit()
+
+        return jsonify({"success": True, "message": "Team is now asking for a match"}), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+    finally:
+        # Ensure resources are released
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
+
+@app.route('/stop-asking-for-match', methods=['POST'])
+def stop_asking_for_match():
+    try:
+        # Get the email from the request data
+        data = request.get_json()
+        email = data.get('email')
+
+        if not email:
+            return jsonify({"success": False, "message": "Email is required"}), 400
+
+        # Connect to the database
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Update the isAskingForMatch value to FALSE for the team with the given email
+        query = "UPDATE Team SET isAskingForMatch = FALSE WHERE Email = %s"
+        cursor.execute(query, (email,))
+
+        # Check if any rows were updated
+        if cursor.rowcount == 0:
+            return jsonify({"success": False, "message": "Team not found"}), 404
+
+        # Commit the changes
+        connection.commit()
+
+        return jsonify({"success": True, "message": "Team is no longer asking for a match"}), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+    finally:
+        # Ensure resources are released
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

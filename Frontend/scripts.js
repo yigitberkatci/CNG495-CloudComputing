@@ -184,6 +184,76 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+document.addEventListener("DOMContentLoaded", () => {
+    // Get the buttons
+    const askForMatchButton = document.getElementById("ask-for-match-btn");
+    const notAskForMatchButton = document.getElementById("not-ask-for-match-btn");
+
+    // Add event listeners to the buttons
+    askForMatchButton.addEventListener("click", async () => {
+        const email = localStorage.getItem("loggedInEmail"); // Retrieve the logged-in user's email
+
+        if (!email) {
+            alert("You must be logged in to perform this action.");
+            window.location.href = "login.html"; // Redirect to login page
+            return;
+        }
+
+        try {
+            const response = await fetch("http://127.0.0.1:5000/ask-for-match", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert("You are now looking for an opponent!");
+            } else {
+                alert(`Failed to update status: ${result.message || "Unknown error"}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again later.");
+        }
+    });
+
+    notAskForMatchButton.addEventListener("click", async () => {
+        const email = localStorage.getItem("loggedInEmail"); // Retrieve the logged-in user's email
+
+        if (!email) {
+            alert("You must be logged in to perform this action.");
+            window.location.href = "login.html"; // Redirect to login page
+            return;
+        }
+
+        try {
+            const response = await fetch("http://127.0.0.1:5000/stop-asking-for-match", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert("You are no longer looking for an opponent.");
+            } else {
+                alert(`Failed to update status: ${result.message || "Unknown error"}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again later.");
+        }
+    });
+});
+
+
 document.addEventListener('DOMContentLoaded', fetchLeagueTableData);
 async function fetchLeagueTableData() {
     const response = await fetch('http://127.0.0.1:5000/rankings');
