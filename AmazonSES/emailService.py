@@ -19,19 +19,16 @@ class emailService:
 
         if type == "generalRequest":  # Team is looking for any match
             subject = "New General Match Request from SoccerMatchScheduler"
+            #get the all team name data and show them
             body = f"""<html>
             <head></head>
             <body>
                 <h1>{match_details['team1']} is looking for any match</h1>
-                <h4>Match Details are as follows:</h4>
+                <h4>Other Teams Looking for a Match are as Follows:</h4>
                 <p>
-                    Date: {match_details['date']}<br>
-                    Time: {match_details['time']}<br>
-                    Publishing Team Name: {match_details['team1']}<br>
+                    Team Name: {match_details['team1']}<br>
                 </p>
-                <p>To respond to the match request, please go to:<br>
-                <a href="http://www.soccermatchscheduler.com.s3-website.eu-north-1.amazonaws.com">SoccerMatchScheduler</a>
-                </p>
+                
             </body>
             </html>"""
 
@@ -47,8 +44,7 @@ class emailService:
                     Time: {match_details['time']}<br>
                     Match: {match_details['team1']} vs {match_details['team2']}<br>
                 </p>
-                <p>To respond to the match request, please go to:<br>
-                <a href="http://www.soccermatchscheduler.com.s3-website.eu-north-1.amazonaws.com">SoccerMatchScheduler</a>
+                
                 </p>
             </body>
             </html>"""
