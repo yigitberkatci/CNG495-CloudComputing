@@ -120,6 +120,49 @@ def register():
 
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route('/rankings', methods=['GET'])
+def get_rankings():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        query = """
+        SELECT 
+            t.Name AS Club,
+            COUNT(sm.MatchID) AS Played,
+            SUM(CASE WHEN sm.Score1 > sm.Score2 AND sm.Team1ID = t.TeamID THEN 1
+                     WHEN sm.Score2 > sm.Score1 AND sm.Team2ID = t.TeamID THEN 1
+                     ELSE 0 END) AS Won,
+            SUM(CASE WHEN sm.Score1 < sm.Score2 AND sm.Team1ID = t.TeamID THEN 1
+                     WHEN sm.Score2 < sm.Score1 AND sm.Team2ID = t.TeamID THEN 1
+                     ELSE 0 END) AS Lost,
+            SUM(CASE WHEN sm.Score1 = sm.Score2 THEN 1 ELSE 0 END) AS Drawn,
+            SUM(CASE WHEN sm.Team1ID = t.TeamID THEN sm.Score1
+                     WHEN sm.Team2ID = t.TeamID THEN sm.Score2
+                     ELSE 0 END) AS GF, -- Goals For
+            SUM(CASE WHEN sm.Team1ID = t.TeamID THEN sm.Score2
+                     WHEN sm.Team2ID = t.TeamID THEN sm.Score1
+                     ELSE 0 END) AS GA, -- Goals Against
+            CONCAT(ROUND(
+                SUM(CASE WHEN sm.Score1 > sm.Score2 AND sm.Team1ID = t.TeamID THEN 1
+                         WHEN sm.Score2 > sm.Score1 AND sm.Team2ID = t.TeamID THEN 1
+                         ELSE 0 END) * 100.0 / COUNT(sm.MatchID), 2), '%') AS `Win %`
+        FROM Team t
+        LEFT JOIN SoccerMatch sm
+        ON t.TeamID = sm.Team1ID OR t.TeamID = sm.Team2ID
+        GROUP BY t.TeamID
+        ORDER BY Played DESC, `Win %` DESC;
+        """
+        cursor.execute(query)
+        rankings = cursor.fetchall()
+
+        cursor.close()
+        connection.close()
+
+        return jsonify({"success": True, "data": rankings}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 @app.route("/booking", methods=['POST'])
 def booking():
     service = emailService()

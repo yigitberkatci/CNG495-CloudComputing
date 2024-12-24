@@ -174,4 +174,32 @@ document.addEventListener('DOMContentLoaded', () => {
       modal.style.display = 'none';
     });
   });
-  
+
+document.addEventListener('DOMContentLoaded', fetchLeagueTableData);
+async function fetchLeagueTableData() {
+    const response = await fetch('http://127.0.0.1:5000/rankings');
+    const result = await response.json();
+
+    if (result.success) {
+        const tableBody = document.getElementById('table-body');
+        tableBody.innerHTML = ''; // Clear previous rows
+
+        result.data.forEach((team, index) => {
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${team.Club}</td>
+                <td>${team.Played}</td>
+                <td>${team.Won}</td>
+                <td>${team.Lost}</td>
+                <td>${team.Drawn}</td>
+                <td>${team.GF}</td>
+                <td>${team.GA}</td>
+                <td>${team['Win %']}</td>
+            `;
+
+            tableBody.appendChild(row);
+        });
+    }
+}
