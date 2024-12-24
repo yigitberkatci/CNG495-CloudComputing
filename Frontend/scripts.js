@@ -3,7 +3,61 @@ document.addEventListener('DOMContentLoaded', function () {
     var dt = new Date();
     document.getElementById('schedule-date').innerHTML = dt.toLocaleDateString();
 });
+// Function to fetch timeslot data from the backend
+document.addEventListener('DOMContentLoaded', fetchTimeslotData);
 
+async function fetchTimeslotData() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/timeslot'); // Update with your backend URL if different
+        const result = await response.json();
+
+        if (result.success) {
+            const scheduleData = result.data; // Data fetched from the backend
+            populateScheduler(scheduleData);
+        } else {
+            console.error("Error fetching timeslot data:", result.error);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+// Function to populate the scheduler table
+function populateScheduler(scheduleData) {
+    const schedulerBody = document.getElementById('scheduler-body');
+    schedulerBody.innerHTML = ''; // Clear existing rows
+
+    scheduleData.forEach(slot => {
+        const row = document.createElement('tr');
+
+        const timeCell = document.createElement('td');
+        timeCell.innerText = `${slot.StartTime} - ${slot.EndTime}`;
+
+        const matchCell = document.createElement('td');
+        if (slot.Team1Name && slot.Team2Name) {
+            matchCell.innerText = `${slot.Team1Name} - ${slot.Team2Name}`;
+        } else {
+            matchCell.innerText = "Available";
+        }
+
+        const actionCell = document.createElement('td');
+        if (slot.IsBooked) {
+            actionCell.innerHTML = '<button class="booked" disabled>Booked</button>';
+        } else {
+            actionCell.innerHTML = '<button class="book-now">Book Now</button>';
+        }
+
+        row.appendChild(timeCell);
+        row.appendChild(matchCell);
+        row.appendChild(actionCell);
+
+        schedulerBody.appendChild(row);
+    });
+}
+
+// Call the function to fetch data when the page loads
+
+/*
 // Example data from database
 const scheduleData = [
     { time: "17:00 - 18:00", match: "Liverpool - Manchester City", isBooked: true },
@@ -38,6 +92,8 @@ scheduleData.forEach(slot => {
 
     schedulerBody.appendChild(row);
 });
+*/
+
 //LIST OF TEAMS ASKING FOR MATCH
 document.addEventListener('DOMContentLoaded', function () {
     loadMatchRequestTeams();

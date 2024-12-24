@@ -4,13 +4,13 @@ from hashlib import sha256
 from flask_cors import CORS
 from datetime import datetime
 from AmazonSES.emailService import emailService
-from flask_session import Session
+"""from flask_session import Session"""
 
 #Session configuration
 app = Flask(__name__)
-app.secret_key = 'AsRs*20I'
+"""app.secret_key = 'AsRs*20I'
 app.config['SESSION_TYPE'] = 'filesystem'
-Session(app)
+Session(app)"""
 CORS(app)
 
 @app.route('/')
@@ -25,22 +25,21 @@ def get_timeslot():
 
         query = """
                 SELECT 
-                    ts.TimeSlotID,
-                    ts.StartTime,
-                    ts.EndTime,
+                    TIME_FORMAT(ts.StartTime, '%H:%i:%s') AS StartTime,
+                    TIME_FORMAT(ts.EndTime, '%H:%i:%s') AS EndTime,
                     ts.IsBooked,
-                    ts.MatchID,
                     t1.Name AS Team1Name,
                     t2.Name AS Team2Name
                 FROM TimeSlot ts
                 LEFT JOIN SoccerMatch sm ON ts.MatchID = sm.MatchID
                 LEFT JOIN Team t1 ON sm.Team1ID = t1.TeamID
                 LEFT JOIN Team t2 ON sm.Team2ID = t2.TeamID
-                WHERE ts.IsBooked = TRUE
+                WHERE ts.Date = CURDATE()
                 ORDER BY ts.StartTime;
                 """
         cursor.execute(query)
         timeslots = cursor.fetchall()
+
 
         cursor.close()
         connection.close()
