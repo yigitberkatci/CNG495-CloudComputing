@@ -423,6 +423,187 @@ body {
     color: #555;
     margin-bottom: 10px;
 }
+/* Admin Panel Design */
+.adminPanel{
+    margin-top: 100px;
+}
+#team-management-section {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+    overflow-x: auto;
+}
+
+#team-management-section h3 {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#team-management-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#team-management-table th, 
+#team-management-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+#team-management-table th {
+    background-color: #333;
+    color: white;
+    text-transform: uppercase;
+}
+
+#team-management-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#team-management-table tbody tr:hover {
+    background-color: #e9e9e9;
+}
+
+.delete-team, .edit-team {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.delete-team:hover {
+    background-color: darkred;
+}
+
+.edit-team {
+    background-color: blue;
+}
+
+.edit-team:hover {
+    background-color: darkblue;
+}
+
+#match-score-section {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+    overflow-x: auto;
+}
+
+#match-score-section h3 {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#match-score-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#match-score-table th, 
+#match-score-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+#match-score-table th {
+    background-color: #333;
+    color: white;
+    text-transform: uppercase;
+}
+
+#match-score-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#match-score-table tbody tr:hover {
+    background-color: #e9e9e9;
+}
+
+.save-score {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.save-score:hover {
+    background-color: darkgreen;
+}
+#timeslot-management-section {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 90%;
+    overflow-x: auto;
+}
+
+#timeslot-management-section h3 {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#timeslot-management-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#timeslot-management-table th, 
+#timeslot-management-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+#timeslot-management-table th {
+    background-color: #333;
+    color: white;
+    text-transform: uppercase;
+}
+
+#timeslot-management-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#timeslot-management-table tbody tr:hover {
+    background-color: #e9e9e9;
+}
+
+.delete-timeslot {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.delete-timeslot:hover {
+    background-color: darkred;
+}
 
   
   

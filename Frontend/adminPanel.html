@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccerMatch Scheduler</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <h2>Soccer Match Scheduler</h2>
+    </header>
+    <div class="adminPanel">
+        <div id="team-management-section">
+            <h3>Team Management</h3>
+            <table id="team-management-table">
+                <thead>
+                    <tr>
+                        <th>Team Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Team rows will be dynamically populated -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="match-score-section">
+            <h3>Match Score Management</h3>
+            <table id="match-score-table">
+                <thead>
+                    <tr>
+                        <th>Match</th>
+                        <th>Team 1 Score</th>
+                        <th>Team 2 Score</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Match rows will be dynamically populated -->
+                </tbody>
+            </table>
+        </div>
+        <div id="timeslot-management-section">
+            <h3>Timeslot Management</h3>
+            <table id="timeslot-management-table">
+                <thead>
+                    <tr>
+                        <th>Timeslot</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Timeslot rows will be dynamically populated -->
+                </tbody>
+            </table>
+        </div>
+                
+    </div>
+
+    <script src="scripts.js"></script>
+</body>
+</html>

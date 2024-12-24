@@ -203,3 +203,242 @@ async function fetchLeagueTableData() {
         });
     }
 }
+//ADMIN PANEL FUNCTIONS
+// Load teams
+document.addEventListener('DOMContentLoaded', loadTeams);
+
+async function loadTeams() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/api/teams');
+        const result = await response.json();
+
+        if (result.success) {
+            const teamTableBody = document.getElementById('team-management-table').getElementsByTagName('tbody')[0];
+            teamTableBody.innerHTML = '';
+
+            result.data.forEach(team => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${team.Name}</td>
+                    <td>${team.Email}</td>
+                    <td>
+                        <button class="delete-team" data-id="${team.TeamID}">Delete</button>
+                        <button class="edit-team" data-id="${team.TeamID}" data-name="${team.Name}" data-email="${team.Email}">Edit</button>
+                    </td>
+                `;
+
+                teamTableBody.appendChild(row);
+            });
+
+            attachTeamActions();
+        } else {
+            console.error('Error fetching teams:', result.error);
+        }
+    } catch (error) {
+        console.error('Error loading teams:', error);
+    }
+}
+
+// Add action to the edit and delete buttons
+function attachTeamActions() {
+    document.querySelectorAll('.delete-team').forEach(button => {
+        button.addEventListener('click', async (event) => {
+            const teamId = event.target.dataset.id;
+            if (confirm('Are you sure you want to delete this team?')) {
+                await deleteTeam(teamId);
+                loadTeams();
+            }
+        });
+    });
+
+    document.querySelectorAll('.edit-team').forEach(button => {
+        button.addEventListener('click', (event) => {
+            const teamId = event.target.dataset.id;
+            const teamName = event.target.dataset.name;
+            const teamEmail = event.target.dataset.email;
+
+            const newName = prompt('Enter new team name:', teamName);
+            const newEmail = prompt('Enter new email:', teamEmail);
+
+            if (newName && newEmail) {
+                updateTeam(teamId, newName, newEmail);
+            }
+        });
+    });
+}
+
+// Delete the team
+async function deleteTeam(teamId) {
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/api/teams/${teamId}`, {
+            method: 'DELETE',
+        });
+        const result = await response.json();
+        if (result.success) {
+            alert('Team deleted successfully');
+        } else {
+            alert('Failed to delete team: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Error deleting team:', error);
+    }
+}
+
+// Edit the team
+async function updateTeam(teamId, name, email) {
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/api/teams/${teamId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email }),
+        });
+        const result = await response.json();
+        if (result.success) {
+            alert('Team updated successfully');
+            loadTeams();
+        } else {
+            alert('Failed to update team: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Error updating team:', error);
+    }
+}
+
+// Load match score informations
+document.addEventListener('DOMContentLoaded', loadMatchScores);
+
+async function loadMatchScores() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/api/matches');
+        const result = await response.json();
+
+        if (result.success) {
+            const matchTableBody = document.getElementById('match-score-table').getElementsByTagName('tbody')[0];
+            matchTableBody.innerHTML = '';
+
+            result.data.forEach(match => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${match.Team1Name} vs ${match.Team2Name}</td>
+                    <td><input type="number" class="score-input" data-match-id="${match.MatchID}" data-team="1" value="${match.Score1 || ''}" /></td>
+                    <td><input type="number" class="score-input" data-match-id="${match.MatchID}" data-team="2" value="${match.Score2 || ''}" /></td>
+                    <td><button class="save-score" data-match-id="${match.MatchID}">Save</button></td>
+                `;
+
+                matchTableBody.appendChild(row);
+            });
+
+            attachSaveActions();
+        } else {
+            console.error('Error fetching match scores:', result.error);
+        }
+    } catch (error) {
+        console.error('Error loading match scores:', error);
+    }
+}
+
+// Add action the save button
+function attachSaveActions() {
+    document.querySelectorAll('.save-score').forEach(button => {
+        button.addEventListener('click', async (event) => {
+            const matchId = event.target.dataset.matchId;
+            const score1 = document.querySelector(`.score-input[data-match-id="${matchId}"][data-team="1"]`).value;
+            const score2 = document.querySelector(`.score-input[data-match-id="${matchId}"][data-team="2"]`).value;
+
+            if (score1 !== '' && score2 !== '') {
+                await saveMatchScore(matchId, score1, score2);
+            } else {
+                alert('Please enter both scores.');
+            }
+        });
+    });
+}
+
+// Save the scores
+async function saveMatchScore(matchId, score1, score2) {
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/api/matches/${matchId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ score1, score2 }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert('Scores updated successfully');
+            loadMatchScores();
+        } else {
+            alert('Failed to update scores: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Error saving match score:', error);
+    }
+}
+// Load all timeslots
+document.addEventListener('DOMContentLoaded', loadTimeslots);
+
+async function loadTimeslots() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/api/timeslots');
+        const result = await response.json();
+
+        if (result.success) {
+            const timeslotTableBody = document.getElementById('timeslot-management-table').getElementsByTagName('tbody')[0];
+            timeslotTableBody.innerHTML = '';
+
+            result.data.forEach(timeslot => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${timeslot.StartTime} - ${timeslot.EndTime}</td>
+                    <td>${timeslot.IsBooked ? 'Booked' : 'Available'}</td>
+                    <td>
+                        <button class="delete-timeslot" data-id="${timeslot.TimeSlotID}">Delete</button>
+                    </td>
+                `;
+
+                timeslotTableBody.appendChild(row);
+            });
+
+            attachTimeslotActions();
+        } else {
+            console.error('Error fetching timeslots:', result.error);
+        }
+    } catch (error) {
+        console.error('Error loading timeslots:', error);
+    }
+}
+
+// Add deleting actions
+function attachTimeslotActions() {
+    document.querySelectorAll('.delete-timeslot').forEach(button => {
+        button.addEventListener('click', async (event) => {
+            const timeslotId = event.target.dataset.id;
+            if (confirm('Are you sure you want to delete this timeslot?')) {
+                await deleteTimeslot(timeslotId);
+                loadTimeslots(); // Tabloyu yenile
+            }
+        });
+    });
+}
+
+// Delete the timeslot
+async function deleteTimeslot(timeslotId) {
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/api/timeslots/${timeslotId}`, {
+            method: 'DELETE',
+        });
+        const result = await response.json();
+        if (result.success) {
+            alert('Timeslot deleted successfully');
+        } else {
+            alert('Failed to delete timeslot: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Error deleting timeslot:', error);
+    }
+}
+
