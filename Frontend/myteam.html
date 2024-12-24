@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoccerMatch Scheduler</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="team-info-container">
+        <h1>My Team</h1>
+        <div id="team-info">
+
+        </div>
+    </div>
+
+    <script src="scripts.js"></script>
+    <script>
+        async function loadMyTeamInfo() {
+            try {
+                const response = await fetch('/api/myteam');
+                const result = await response.json();
+
+                if (result.success) {
+                    const teamInfo = result.data;
+                    const teamInfoDiv = document.getElementById('team-info');
+
+                    teamInfoDiv.innerHTML = `
+                        <p><strong>Team Name:</strong> ${teamInfo.Name}</p>
+                        <p><strong>Email:</strong> ${teamInfo.Email}</p>
+                        <p><strong>Ranking:</strong> ${teamInfo.Ranking}</p>
+                        <p><strong>Creation Date:</strong> ${teamInfo.CreationDate}</p>
+                    `;
+                } else {
+                    alert('Failed to load team info: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error loading team info:', error);
+                alert('An error occurred while loading your team info.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadMyTeamInfo);
+    </script>
+</body>
+</html>

@@ -1,11 +1,16 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, session
 from db_config import get_db_connection
 from hashlib import sha256
 from flask_cors import CORS
 from datetime import datetime
 from AmazonSES.emailService import emailService
+from flask_session import Session
 
+#Session configuration
 app = Flask(__name__)
+app.secret_key = 'AsRs*20I'
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 CORS(app)
 
 @app.route('/')
@@ -73,6 +78,8 @@ def login():
         #password verify
         if hashed_password != user['Password']:
             return jsonify({"success": False, "message": "Invalid email or password"}), 401
+        #Save user information into session
+        session['email'] = email
 
         return jsonify({"success": True, "message": "Login successful"}), 200
 
@@ -246,5 +253,32 @@ def get_teams_asking_for_match():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
+#MyTeam page
+@app.route('/api/myteam', methods=['GET'])
+def get_my_team():
+    try:
+        user_email = session.get('email')
+
+        if not user_email:
+            return jsonify({"success": False, "message": "User not logged in"}), 401
+
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        query = "SELECT Name, Email, Ranking, CreationDate FROM Team WHERE Email = %s"
+        cursor.execute(query, (user_email,))
+        team = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        if not team:
+            return jsonify({"success": False, "message": "Team not found"}), 404
+
+        return jsonify({"success": True, "data": team}), 200
+
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
