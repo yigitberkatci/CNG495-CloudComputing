@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65369a6a-bed1-458d-be00-143af3760ec2" name="Changes" comment="Timeslot table Frontend and Backend connection">
+    <list default="true" id="65369a6a-bed1-458d-be00-143af3760ec2" name="Changes" comment="Team Information Page added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AmazonSES/emailService.py" beforeDir="false" afterPath="$PROJECT_DIR$/AmazonSES/emailService.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/scripts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/db_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/db_config.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +109,7 @@
       <workItem from="1734614647024" duration="3524000" />
       <workItem from="1734964159019" duration="7918000" />
       <workItem from="1734980009707" duration="3123000" />
-      <workItem from="1735040775010" duration="5797000" />
+      <workItem from="1735040775010" duration="14164000" />
     </task>
     <task id="LOCAL-00001" summary="Connection codes for Flask connection">
       <option name="closed" value="true" />
@@ -183,18 +183,53 @@
       <option name="project" value="LOCAL" />
       <updated>1735054291497</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Team Information Page added">
+      <option name="closed" value="true" />
+      <created>1735056601109</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1735056601109</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="main" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -210,9 +245,10 @@
     <MESSAGE value="Changes is database structure and booking operation added (notification trigger not included)" />
     <MESSAGE value="Get Teams Asking For Match updated" />
     <MESSAGE value="Timeslot table Frontend and Backend connection" />
-    <option name="LAST_COMMIT_MESSAGE" value="Timeslot table Frontend and Backend connection" />
+    <MESSAGE value="Team Information Page added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Team Information Page added" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CNG495_CloudComputing$app.coverage" NAME="app Coverage Results" MODIFIED="1735056176424" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/CNG495_CloudComputing$app.coverage" NAME="app Coverage Results" MODIFIED="1735070404637" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
   </component>
 </project>

@@ -8,8 +8,8 @@ class emailService:
     def __init__(self):
         self.senderEmail = "soccermatchscheduler@gmail.com"
         self.senderName = "Soccer Match Scheduler"
-        self.stmp_username = ""
-        self.stmp_password = ""
+        self.stmp_username = "AKIA2LIP2CXYTJDVBHGG"
+        self.stmp_password = "BH5wZZ7ehafr83CJns+mHMFzZFCzfCvx7oteiPYjXA10"
         self.HOST = "email-smtp.us-east-1.amazonaws.com"
         self.PORT = 587
 
@@ -23,10 +23,11 @@ class emailService:
             body = f"""<html>
             <head></head>
             <body>
-                <h1>{match_details['team1']} is looking for any match</h1>
+                <h1>{match_details['team']} is looking for any match</h1>
                 <h4>Other Teams Looking for a Match are as Follows:</h4>
                 <p>
-                    Team Name: {match_details['team1']}<br>
+                    Please contact a team member if you want to play!<br>
+                    Also don't for get to book the timeslot if you want to play!
                 </p>
                 
             </body>

@@ -2,8 +2,8 @@ import mysql.connector
 
 def get_db_connection():
     return mysql.connector.connect(
-        host='localhost',
-        user='root',
-        password='AsRs*20I',
+        host='soccermatchdb.craqsywqek0z.eu-north-1.rds.amazonaws.com',
+        user='admin',
+        password='SoccerMatchDB',
         database='SoccerMatch'
     )
