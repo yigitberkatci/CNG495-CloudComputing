@@ -44,14 +44,16 @@
               const result = await response.json();
 
               if (response.ok) {
-                alert(result.message); // "Login successful"
-                window.location.href = "index.html";
+                  localStorage.setItem("loggedInEmail", email);
+                  localStorage.setItem("loggedIn", true)
+                    alert(result.message); // "Login successful"
+                    window.location.href = "index.html";
               } else {
-                alert(result.message || "Login failed. Please try again.");
+                    alert(result.message || "Login failed. Please try again.");
               }
             } catch (error) {
-              console.error("Error during login:", error);
-              alert("An error occurred. Please try again later.");
+                  console.error("Error during login:", error);
+                  alert("An error occurred. Please try again later.");
             }
           });
         });

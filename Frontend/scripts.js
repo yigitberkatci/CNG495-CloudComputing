@@ -1,3 +1,12 @@
+//check login
+document.addEventListener("DOMContentLoaded", function () {
+    const loggedIn = localStorage.getItem("loggedIn");
+    if (loggedIn !== "true") {
+        // User is not logged in, redirect to login page
+        window.location.href = "login.html";
+    }
+});
+
 //Getting current date function
 document.addEventListener('DOMContentLoaded', function () {
     var dt = new Date();
@@ -149,13 +158,13 @@ document.addEventListener('DOMContentLoaded', () => {
   
       const formData = new FormData(bookingForm);
       const bookingData = {
-        team1: formData.get('team1'),
-        team2: formData.get('team2'),
-        timeslot: formData.get('timeslot'),
+          team1: localStorage.getItem("loggedInEmail"),
+          team2: formData.get('team'),
+          timeslot: formData.get('timeslot'),
       };
   
       try {
-        const response = await fetch('/booking', {
+        const response = await fetch('http://127.0.0.1:5000/booking', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(bookingData),
@@ -235,7 +244,8 @@ async function loadTeams() {
         } else {
             console.error('Error fetching teams:', result.error);
         }
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Error loading teams:', error);
     }
 }

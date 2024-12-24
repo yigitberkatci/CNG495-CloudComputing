@@ -4,13 +4,9 @@ from hashlib import sha256
 from flask_cors import CORS
 from datetime import datetime
 from AmazonSES.emailService import emailService
-"""from flask_session import Session"""
 
 #Session configuration
 app = Flask(__name__)
-"""app.secret_key = 'AsRs*20I'
-app.config['SESSION_TYPE'] = 'filesystem'
-Session(app)"""
 CORS(app)
 
 @app.route('/')
@@ -77,12 +73,11 @@ def login():
         #password verify
         if hashed_password != user['Password']:
             return jsonify({"success": False, "message": "Invalid email or password"}), 401
-        #Save user information into session
-        session['email'] = email
 
         return jsonify({"success": True, "message": "Login successful"}), 200
 
     except Exception as e:
+        print(f"Error occurred: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route('/register', methods=['POST'])
@@ -171,6 +166,7 @@ def booking():
         team1 = data.get('team1')
         team2 = data.get('team2')
         timeslot = data.get('timeslot')
+        start_time, end_time = [time.strip() for time in timeslot.split('-')]
 
         match_details = {
             "date": datetime.now(),
@@ -186,7 +182,7 @@ def booking():
         msg = f"Team {team1} wants to play a match with your team!"
 
         # Get IDs of both teams
-        query = "SELECT TeamID FROM Team WHERE Name = %s"
+        query = "SELECT TeamID FROM Team WHERE Email = %s"
         cursor.execute(query, (team1,))
         team1ID = cursor.fetchone()
         if team1ID:
@@ -194,6 +190,7 @@ def booking():
         else:
             return jsonify({"success": False, "error": "Team1 not found"}), 400
 
+        query = "SELECT TeamID FROM Team WHERE Name = %s"
         cursor.execute(query, (team2,))
         team2ID = cursor.fetchone()
         if team2ID:
@@ -203,7 +200,7 @@ def booking():
 
         # Get TimeSlot ID
         query = "SELECT TimeSlotID FROM TimeSlot WHERE StartTime = %s"
-        cursor.execute(query, (timeslot,))
+        cursor.execute(query, (start_time,))
         timeslotID = cursor.fetchone()
         if timeslotID:
             timeslotID = timeslotID[0]  # Extract value from tuple
