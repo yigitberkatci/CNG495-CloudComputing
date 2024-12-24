@@ -387,6 +387,191 @@ def stop_asking_for_match():
         if 'connection' in locals():
             connection.close()
 
+#Admin Panel
+# 1. Load Teams
+@app.route('/api/teams', methods=['GET'])
+def get_teams():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        query = "SELECT TeamID, Name, Email FROM Team"
+        cursor.execute(query)
+        teams = cursor.fetchall()
+
+        return jsonify({"success": True, "data": teams}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
+
+# 2. Delete a Team
+@app.route('/api/teams/<int:team_id>', methods=['DELETE'])
+def delete_team(team_id):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        query = "DELETE FROM Team WHERE TeamID = %s"
+        cursor.execute(query, (team_id,))
+        connection.commit()
+
+        if cursor.rowcount == 0:
+            return jsonify({"success": False, "message": "Team not found"}), 404
+
+        return jsonify({"success": True, "message": "Team deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
+
+# 3. Edit a Team
+@app.route('/api/teams/<int:team_id>', methods=['PUT'])
+def update_team(team_id):
+    try:
+        data = request.get_json()
+        name = data.get('name')
+        email = data.get('email')
+
+        if not name or not email:
+            return jsonify({"success": False, "message": "Name and email are required"}), 400
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        query = "UPDATE Team SET Name = %s, Email = %s WHERE TeamID = %s"
+        cursor.execute(query, (name, email, team_id))
+        connection.commit()
+
+        if cursor.rowcount == 0:
+            return jsonify({"success": False, "message": "Team not found"}), 404
+
+        return jsonify({"success": True, "message": "Team updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
+
+# 4. Load Match Scores
+@app.route('/api/matches', methods=['GET'])
+def get_matches():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        query = """
+            SELECT 
+                sm.MatchID,
+                t1.Name AS Team1Name,
+                t2.Name AS Team2Name,
+                sm.Score1,
+                sm.Score2
+            FROM SoccerMatch sm
+            JOIN Team t1 ON sm.Team1ID = t1.TeamID
+            JOIN Team t2 ON sm.Team2ID = t2.TeamID
+        """
+        cursor.execute(query)
+        matches = cursor.fetchall()
+
+        return jsonify({"success": True, "data": matches}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
+
+# 5. Update Match Scores
+@app.route('/api/matches/<int:match_id>', methods=['PUT'])
+def update_match_score(match_id):
+    try:
+        data = request.get_json()
+        score1 = data.get('score1')
+        score2 = data.get('score2')
+
+        if score1 is None or score2 is None:
+            return jsonify({"success": False, "message": "Both scores are required"}), 400
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        query = "UPDATE SoccerMatch SET Score1 = %s, Score2 = %s WHERE MatchID = %s"
+        cursor.execute(query, (score1, score2, match_id))
+        connection.commit()
+
+        if cursor.rowcount == 0:
+            return jsonify({"success": False, "message": "Match not found"}), 404
+
+        return jsonify({"success": True, "message": "Scores updated successfully"}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
+
+# 6. Load Timeslots
+@app.route('/api/timeslots', methods=['GET'])
+def get_timeslots():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        query = """
+                    SELECT 
+                        TimeSlotID,
+                        TIME_FORMAT(StartTime, '%H:%i:%s') AS StartTime,
+                        TIME_FORMAT(EndTime, '%H:%i:%s') AS EndTime,
+                        IsBooked
+                    FROM TimeSlot
+                """
+        cursor.execute(query)
+        timeslots = cursor.fetchall()
+
+        return jsonify({"success": True, "data": timeslots}), 200
+    except Exception as e:
+        print(e)
+        return jsonify({"success": False, "error": str(e)}), 500
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
+
+# 7. Delete Timeslot
+@app.route('/api/timeslots/<int:timeslot_id>', methods=['DELETE'])
+def delete_timeslot(timeslot_id):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        query = "DELETE FROM TimeSlot WHERE TimeSlotID = %s"
+        cursor.execute(query, (timeslot_id,))
+        connection.commit()
+
+        if cursor.rowcount == 0:
+            return jsonify({"success": False, "message": "Timeslot not found"}), 404
+
+        return jsonify({"success": True, "message": "Timeslot deleted successfully"}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 
