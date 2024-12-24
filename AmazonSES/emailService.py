@@ -37,6 +37,7 @@ class emailService:
             body = f"""<html>
             <head></head>
             <body>
+            
                 <h1>{match_details['team1']} wants to match with your team</h1>
                 <h4>Match Details are as follows:</h4>
                 <p>
