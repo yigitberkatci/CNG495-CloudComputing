@@ -337,6 +337,19 @@ body {
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
 }
+.ask-for-match-btn{
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 12px;
+}
+.ask-for-match-btn:hover{
+    background-color: rgb(105, 0, 0);
+}
 
 
 
