@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65369a6a-bed1-458d-be00-143af3760ec2" name="Changes" comment="DB Event added. emailService updated. backend fix (not tested)">
+    <list default="true" id="65369a6a-bed1-458d-be00-143af3760ec2" name="Changes" comment="MyTeam button fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Frontend/header.html" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/header.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/db.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +109,7 @@
       <workItem from="1734980009707" duration="3123000" />
       <workItem from="1735040775010" duration="24543000" />
       <workItem from="1735134543461" duration="1959000" />
-      <workItem from="1735159138607" duration="4325000" />
+      <workItem from="1735159138607" duration="5907000" />
     </task>
     <task id="LOCAL-00001" summary="Connection codes for Flask connection">
       <option name="closed" value="true" />
@@ -247,7 +247,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735162695758</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="MyTeam button fix">
+      <option name="closed" value="true" />
+      <created>1735163579377</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1735163579377</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -309,7 +317,8 @@
     <MESSAGE value="Asking for opponent and not asking for opponent done" />
     <MESSAGE value="Admin panel Backend" />
     <MESSAGE value="DB Event added. emailService updated. backend fix (not tested)" />
-    <option name="LAST_COMMIT_MESSAGE" value="DB Event added. emailService updated. backend fix (not tested)" />
+    <MESSAGE value="MyTeam button fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="MyTeam button fix" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/CNG495_CloudComputing$app.coverage" NAME="app Coverage Results" MODIFIED="1735163420959" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />

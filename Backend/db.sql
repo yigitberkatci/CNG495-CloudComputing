@@ -72,3 +72,33 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER UpdateTeamRating
+AFTER INSERT ON SoccerMatch
+FOR EACH ROW
+BEGIN
+    -- Update Team1's Rating
+    UPDATE Team t
+    LEFT JOIN (
+        SELECT
+            t.TeamID,
+            COUNT(sm.MatchID) AS MatchesPlayed,
+            SUM(CASE WHEN sm.Score1 > sm.Score2 AND sm.Team1ID = t.TeamID THEN 1
+                     WHEN sm.Score2 > sm.Score1 AND sm.Team2ID = t.TeamID THEN 1
+                     ELSE 0 END) AS MatchesWon
+        FROM Team t
+        LEFT JOIN SoccerMatch sm ON t.TeamID = sm.Team1ID OR t.TeamID = sm.Team2ID
+        WHERE sm.Score1 IS NOT NULL AND sm.Score2 IS NOT NULL
+        GROUP BY t.TeamID
+    ) win_stats ON t.TeamID = win_stats.TeamID
+    SET t.Rating = COALESCE(
+        ROUND(
+            (win_stats.MatchesWon * 100.0 / win_stats.MatchesPlayed)
+            * win_stats.MatchesPlayed * 10, 2
+        ), 0)
+    WHERE t.TeamID IN (NEW.Team1ID, NEW.Team2ID);
+END $$
+
+DELIMITER ;
