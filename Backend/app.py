@@ -337,6 +337,40 @@ def ask_for_match():
         # Connect to the database
         connection = get_db_connection()
         cursor = connection.cursor()
+        service = emailService()
+
+        # Get ID of team1
+        query = "SELECT TeamID, Name FROM Team WHERE Email = %s"
+        cursor.execute(query, (email,))
+        result = cursor.fetchone()
+        if result:
+            team1ID = result[0]
+            team = result[1]
+        else:
+            return jsonify({"success": False, "error": "Team1 not found"}), 400
+
+        match_details = {
+            "team": team
+        }
+
+        type = "generalRequest"
+        msg = f"Team {team} is looking for opponents!"
+
+
+        # Get all email addresses
+        query2 = "SELECT Email FROM Team"
+        cursor.execute(query2)
+        receiverEmails = [emails[0] for emails in cursor.fetchall()]  # Extract emails as a list
+
+        # Send the email to all teams
+        for receiverEmail in receiverEmails:
+            service.sendMessage(type, receiverEmail, match_details)
+
+        # Insert into Notification table
+        query = "INSERT INTO Notification (SenderID, Message, Date, NotificationType) VALUES (%s, %s, %s, %s)"
+        values = (team1ID, msg, datetime.now(), type)
+
+        cursor.execute(query, values)
 
         # Update the isAskingForMatch value to TRUE for the team with the given email
         query = "UPDATE Team SET isAskingForMatch = TRUE WHERE Email = %s"
