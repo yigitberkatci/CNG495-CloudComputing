@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65369a6a-bed1-458d-be00-143af3760ec2" name="Changes" comment="Asking for opponent and not asking for opponent done">
+    <list default="true" id="65369a6a-bed1-458d-be00-143af3760ec2" name="Changes" comment="Admin panel Backend">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AmazonSES/emailService.py" beforeDir="false" afterPath="$PROJECT_DIR$/AmazonSES/emailService.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/db.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/myteam.html" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/myteam.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +110,9 @@
       <workItem from="1734614647024" duration="3524000" />
       <workItem from="1734964159019" duration="7918000" />
       <workItem from="1734980009707" duration="3123000" />
-      <workItem from="1735040775010" duration="24335000" />
+      <workItem from="1735040775010" duration="24543000" />
+      <workItem from="1735134543461" duration="1959000" />
+      <workItem from="1735159138607" duration="3451000" />
     </task>
     <task id="LOCAL-00001" summary="Connection codes for Flask connection">
       <option name="closed" value="true" />
@@ -229,7 +234,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735082982236</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Admin panel Backend">
+      <option name="closed" value="true" />
+      <created>1735084153062</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1735084153062</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -289,9 +302,10 @@
     <MESSAGE value="Correction (PopUp)" />
     <MESSAGE value="Booking connection done" />
     <MESSAGE value="Asking for opponent and not asking for opponent done" />
-    <option name="LAST_COMMIT_MESSAGE" value="Asking for opponent and not asking for opponent done" />
+    <MESSAGE value="Admin panel Backend" />
+    <option name="LAST_COMMIT_MESSAGE" value="Admin panel Backend" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CNG495_CloudComputing$app.coverage" NAME="app Coverage Results" MODIFIED="1735084011641" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/CNG495_CloudComputing$app.coverage" NAME="app Coverage Results" MODIFIED="1735162258924" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
   </component>
 </project>

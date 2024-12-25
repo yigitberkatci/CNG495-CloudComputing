@@ -60,14 +60,6 @@ class emailService:
         return msg.as_string()
 
     def sendMessage(self, type, receiverEmail, match_details):
-        """
-        Sends the email using the SMTP server.
-
-        Args:
-        type (str): Type of match request ('generalRequest' or 'specialRequest').
-        receiverEmail (str): Recipient's email address.
-        match_details (dict): Dictionary containing match details.
-        """
         try:
             server = smtplib.SMTP(self.HOST, self.PORT)
             server.ehlo()

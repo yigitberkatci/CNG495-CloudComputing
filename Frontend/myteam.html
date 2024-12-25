@@ -25,8 +25,18 @@
     <script>
         async function loadMyTeamInfo() {
             try {
-                const response = await fetch('/api/myteam');
+                const email = localStorage.getItem("loggedInEmail");
+                //const response = await fetch('http://127.0.0.1:5000/api/myteam');
+                const response = await fetch("http://127.0.0.1:5000/api/myteam", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email }),
+                });
                 const result = await response.json();
+
+
 
                 if (result.success) {
                     const teamInfo = result.data;

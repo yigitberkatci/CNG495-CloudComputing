@@ -163,14 +163,32 @@ def booking():
     service = emailService()
     try:
         data = request.get_json()
-        team1 = data.get('team1')
+        team1email = data.get('team1')
         team2 = data.get('team2')
         timeslot = data.get('timeslot')
         start_time, end_time = [time.strip() for time in timeslot.split('-')]
 
+        now = datetime.now()
+
+        # Format the date and time
+        date = now.strftime("%Y-%m-%d")  # Only the date
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Get team name of logged in team
+        query = "SELECT TeamID, Name FROM Team WHERE Email = %s"
+        cursor.execute(query, (team1email,))
+        result = cursor.fetchone()
+        if result:
+            team1ID = result[0]
+            team1 = result[1]
+        else:
+            return jsonify({"success": False, "error": "Team1 not found"}), 400
+
         match_details = {
-            "date": datetime.now(),
-            "time": datetime.now().time(),
+            "date": date,
+            "time": timeslot,
             "team1": team1,
             "team2": team2  # Optional for generalRequest
         }
@@ -181,14 +199,7 @@ def booking():
         type = "specialRequest"
         msg = f"Team {team1} wants to play a match with your team!"
 
-        # Get IDs of both teams
-        query = "SELECT TeamID FROM Team WHERE Email = %s"
-        cursor.execute(query, (team1,))
-        team1ID = cursor.fetchone()
-        if team1ID:
-            team1ID = team1ID[0]  # Extract value from tuple
-        else:
-            return jsonify({"success": False, "error": "Team1 not found"}), 400
+        # Get ID of second team
 
         query = "SELECT TeamID FROM Team WHERE Name = %s"
         cursor.execute(query, (team2,))
@@ -572,14 +583,11 @@ def delete_timeslot(timeslot_id):
         if 'connection' in locals():
             connection.close()
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-
-#MyTeam page
-@app.route('/api/myteam', methods=['GET'])
+@app.route('/api/myteam', methods=['POST'])
 def get_my_team():
     try:
-        user_email = session.get('email')
+        data = request.get_json()
+        user_email = data.get('email')
 
         if not user_email:
             return jsonify({"success": False, "message": "User not logged in"}), 401
@@ -601,5 +609,11 @@ def get_my_team():
 
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+#MyTeam page
+
 
 

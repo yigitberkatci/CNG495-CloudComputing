@@ -45,3 +45,30 @@ CREATE TABLE Notification (
     FOREIGN KEY (ReceiverID) REFERENCES Team(TeamID) ON DELETE SET NULL,
     FOREIGN KEY (TimeSlotID) REFERENCES TimeSlot(TimeSlotID) ON DELETE SET NULL
 );
+
+
+DELIMITER $$
+
+CREATE EVENT IF NOT EXISTS AddNewTimeslots
+ON SCHEDULE EVERY 1 DAY
+STARTS CURRENT_DATE() + INTERVAL 1 DAY
+DO
+BEGIN
+    DECLARE start_time TIME;
+    DECLARE end_time TIME;
+    DECLARE i INT DEFAULT 0;
+
+    SET start_time = '17:00:00';
+    SET end_time = '18:00:00';
+
+    WHILE i < 5 DO
+        INSERT INTO TimeSlot (Date, StartTime, EndTime, IsBooked, MatchID)
+        VALUES (CURRENT_DATE() + INTERVAL 1 DAY, start_time, end_time, 0, NULL);
+
+        SET start_time = ADDTIME(start_time, '01:00:00');
+        SET end_time = ADDTIME(end_time, '01:00:00');
+        SET i = i + 1;
+    END WHILE;
+END $$
+
+DELIMITER ;
