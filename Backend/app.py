@@ -5,7 +5,6 @@ from flask_cors import CORS
 from datetime import datetime
 from AmazonSES.emailService import emailService
 
-#Session configuration
 app = Flask(__name__)
 CORS(app)
 
@@ -67,19 +66,23 @@ def login():
         if not user:
             return jsonify({"success": False, "message": "Invalid email or password"}), 401
 
-        #hashing using SHA256
+        # Hashing using SHA256
         hashed_password = sha256(password.encode('utf-8')).hexdigest()
 
-        #password verify
+        # Password verification
         if hashed_password != user['Password']:
             return jsonify({"success": False, "message": "Invalid email or password"}), 401
 
-        return jsonify({"success": True, "message": "Login successful"}), 200
+        # Determine if the user is an admin
+        if email.startswith("admin@"):
+            return jsonify({"success": True, "message": "Admin login successful", "isAdmin": True}), 200
+
+        # General user login success
+        return jsonify({"success": True, "message": "Login successful", "isAdmin": False}), 200
 
     except Exception as e:
         print(f"Error occurred: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
-
 @app.route('/register', methods=['POST'])
 def register():
     try:
@@ -88,12 +91,18 @@ def register():
         email = data.get('email')
         password = data.get('password')
 
+        # Validate inputs
         if not team_name or not email or not password:
             return jsonify({"success": False, "message": "Team name, email, and password are required"}), 400
 
-        #hash with SHA256
+        # Prevent emails starting with "admin@"
+        if email.lower().startswith("admin@"):
+            return jsonify({"success": False, "message": "Emails starting with 'admin@' are not allowed"}), 403
+
+        # Hash the password using SHA256
         hashed_password = sha256(password.encode('utf-8')).hexdigest()
 
+        # Check if the email already exists
         connection = get_db_connection()
         cursor = connection.cursor()
 
@@ -104,6 +113,7 @@ def register():
         if existing_user:
             return jsonify({"success": False, "message": "Email already exists"}), 409
 
+        # Insert the new team into the database
         query = "INSERT INTO Team (Name, Email, Password) VALUES (%s, %s, %s)"
         cursor.execute(query, (team_name, email, hashed_password))
         connection.commit()
@@ -114,6 +124,7 @@ def register():
         return jsonify({"success": True, "message": "Registration successful"}), 201
 
     except Exception as e:
+        print(f"Error occurred during registration: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route('/rankings', methods=['GET'])
