@@ -134,31 +134,32 @@ def get_rankings():
         cursor = connection.cursor(dictionary=True)
 
         query = """
-        SELECT 
-            t.Name AS Club,
-            COUNT(sm.MatchID) AS Played,
-            SUM(CASE WHEN sm.Score1 > sm.Score2 AND sm.Team1ID = t.TeamID THEN 1
-                     WHEN sm.Score2 > sm.Score1 AND sm.Team2ID = t.TeamID THEN 1
-                     ELSE 0 END) AS Won,
-            SUM(CASE WHEN sm.Score1 < sm.Score2 AND sm.Team1ID = t.TeamID THEN 1
-                     WHEN sm.Score2 < sm.Score1 AND sm.Team2ID = t.TeamID THEN 1
-                     ELSE 0 END) AS Lost,
-            SUM(CASE WHEN sm.Score1 = sm.Score2 THEN 1 ELSE 0 END) AS Drawn,
-            SUM(CASE WHEN sm.Team1ID = t.TeamID THEN sm.Score1
-                     WHEN sm.Team2ID = t.TeamID THEN sm.Score2
-                     ELSE 0 END) AS GF, -- Goals For
-            SUM(CASE WHEN sm.Team1ID = t.TeamID THEN sm.Score2
-                     WHEN sm.Team2ID = t.TeamID THEN sm.Score1
-                     ELSE 0 END) AS GA, -- Goals Against
-            CONCAT(ROUND(
+                    SELECT 
+                t.Name AS Club,
+                COUNT(sm.MatchID) AS Played,
                 SUM(CASE WHEN sm.Score1 > sm.Score2 AND sm.Team1ID = t.TeamID THEN 1
                          WHEN sm.Score2 > sm.Score1 AND sm.Team2ID = t.TeamID THEN 1
-                         ELSE 0 END) * 100.0 / COUNT(sm.MatchID), 2), '%') AS `Win %`
-        FROM Team t
-        LEFT JOIN SoccerMatch sm
-        ON t.TeamID = sm.Team1ID OR t.TeamID = sm.Team2ID
-        GROUP BY t.TeamID
-        ORDER BY Played DESC, `Win %` DESC;
+                         ELSE 0 END) AS Won,
+                SUM(CASE WHEN sm.Score1 < sm.Score2 AND sm.Team1ID = t.TeamID THEN 1
+                         WHEN sm.Score2 < sm.Score1 AND sm.Team2ID = t.TeamID THEN 1
+                         ELSE 0 END) AS Lost,
+                SUM(CASE WHEN sm.Score1 = sm.Score2 THEN 1 ELSE 0 END) AS Drawn,
+                SUM(CASE WHEN sm.Team1ID = t.TeamID THEN sm.Score1
+                         WHEN sm.Team2ID = t.TeamID THEN sm.Score2
+                         ELSE 0 END) AS GF, -- Goals For
+                SUM(CASE WHEN sm.Team1ID = t.TeamID THEN sm.Score2
+                         WHEN sm.Team2ID = t.TeamID THEN sm.Score1
+                         ELSE 0 END) AS GA, -- Goals Against
+                CONCAT(ROUND(
+                    SUM(CASE WHEN sm.Score1 > sm.Score2 AND sm.Team1ID = t.TeamID THEN 1
+                             WHEN sm.Score2 > sm.Score1 AND sm.Team2ID = t.TeamID THEN 1
+                             ELSE 0 END) * 100.0 / COUNT(sm.MatchID), 2), '%') AS `Win %`
+            FROM Team t
+            LEFT JOIN SoccerMatch sm
+            ON t.TeamID = sm.Team1ID OR t.TeamID = sm.Team2ID
+            WHERE t.Email NOT LIKE 'admin@%'
+            GROUP BY t.TeamID
+            ORDER BY Played DESC, `Win %` DESC;
         """
         cursor.execute(query)
         rankings = cursor.fetchall()
@@ -268,59 +269,7 @@ def booking():
     finally:
         cursor.close()
         connection.close()
-"""
-@app.route('/looking-opponents', methods=['POST'])
-def looking_opponents():
-    try:
-        data = request.get_json()
-        team = data['team']
 
-        match_details ={
-            "team": team
-        }
-        service = emailService()
-        connection = get_db_connection()
-        cursor = connection.cursor()
-
-        type = "generalRequest"
-        msg = f"Team {team} is looking for opponents!"
-
-        # Get ID of team1
-        query = "SELECT TeamID FROM Team WHERE Name = %s"
-        cursor.execute(query, (team,))
-        team1ID = cursor.fetchone()
-        if team1ID:
-            team1ID = team1ID[0]  # Extract value from tuple
-        else:
-            return jsonify({"success": False, "error": "Team1 not found"}), 400
-
-
-        # Get all email addresses
-        query2 = "SELECT Email FROM Team"
-        cursor.execute(query2)
-        receiverEmails = [email[0] for email in cursor.fetchall()]  # Extract emails as a list
-
-        # Send the email to all teams
-        for receiverEmail in receiverEmails:
-            service.sendMessage(type, receiverEmail, match_details)
-
-        # Insert into Notification table
-        query = "INSERT INTO Notification (SenderID, Message, Date, NotificationType) VALUES (%s, %s, %s, %s)"
-        values = (team1ID, msg, datetime.now(), type)
-
-        cursor.execute(query, values)
-        connection.commit()
-
-        return jsonify({"success": True, "message": "Looking for opponents successful"}), 201
-
-    except Exception as e:
-        print(f"Error occurred: {e}")
-        return jsonify({"success": False, "error": str(e)}), 500
-    finally:
-        cursor.close()
-        connection.close()
-
-"""
 @app.route('/api/teams-asking-for-match', methods=['GET'])
 def get_teams_asking_for_match():
     try:
