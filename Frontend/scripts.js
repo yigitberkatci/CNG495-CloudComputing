@@ -598,7 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Fetch and populate scheduler data
             try {
-                const response = await fetch(`http://127.0.0.1:5000/timeslot?date=${date}`);
+                const response = await fetch(`http://127.0.0.1:5000/timeslot-date?date=${date}`);
                 const result = await response.json();
 
                 if (result.success) {

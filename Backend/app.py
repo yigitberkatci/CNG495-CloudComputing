@@ -255,7 +255,7 @@ def booking():
     finally:
         cursor.close()
         connection.close()
-
+"""
 @app.route('/looking-opponents', methods=['POST'])
 def looking_opponents():
     try:
@@ -307,7 +307,7 @@ def looking_opponents():
         cursor.close()
         connection.close()
 
-
+"""
 @app.route('/api/teams-asking-for-match', methods=['GET'])
 def get_teams_asking_for_match():
     try:
@@ -355,7 +355,6 @@ def ask_for_match():
 
         type = "generalRequest"
         msg = f"Team {team} is looking for opponents!"
-
 
         # Get all email addresses
         query2 = "SELECT Email FROM Team"
@@ -643,24 +642,21 @@ def get_my_team():
 
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-
-#MyTeam page
-
-#Calendar Page
-@app.route('/timeslot', methods=['GET'])
-def get_timeslot():
+@app.route('/timeslot-date', methods=['GET'])
+def timeslot_date():
     try:
+        # Get the 'date' parameter or use today's date as default
         date = request.args.get('date', datetime.now().strftime('%Y-%m-%d'))
+        if not date:
+            return jsonify({"success": False, "error": "Invalid date parameter"}), 400
+
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
 
         query = """
             SELECT 
-                TIME_FORMAT(ts.StartTime, '%H:%i:%s') AS StartTime,
-                TIME_FORMAT(ts.EndTime, '%H:%i:%s') AS EndTime,
+                TIME_FORMAT(ts.StartTime, '%H:%i') AS StartTime,
+                TIME_FORMAT(ts.EndTime, '%H:%i') AS EndTime,
                 ts.IsBooked,
                 t1.Name AS Team1Name,
                 t2.Name AS Team2Name
@@ -668,7 +664,7 @@ def get_timeslot():
             LEFT JOIN SoccerMatch sm ON ts.MatchID = sm.MatchID
             LEFT JOIN Team t1 ON sm.Team1ID = t1.TeamID
             LEFT JOIN Team t2 ON sm.Team2ID = t2.TeamID
-            WHERE ts.Date = %s
+            WHERE DATE(ts.Date) = %s
             ORDER BY ts.StartTime;
         """
         cursor.execute(query, (date,))
@@ -679,7 +675,12 @@ def get_timeslot():
 
         return jsonify({"success": True, "data": timeslots}), 200
     except Exception as e:
+        print(f"Error: {e}")  # Log the error
         return jsonify({"success": False, "error": str(e)}), 500
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
 
 
 
