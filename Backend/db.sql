@@ -76,7 +76,7 @@ DELIMITER ;
 DELIMITER $$
 
 CREATE TRIGGER UpdateTeamRanking
-AFTER INSERT ON SoccerMatch
+AFTER UPDATE ON SoccerMatch
 FOR EACH ROW
 BEGIN
     -- Update Team Rankings
