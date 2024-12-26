@@ -314,7 +314,7 @@ def get_teams_asking_for_match():
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
 
-        query = "SELECT Name FROM Team WHERE isAskingForMatch = TRUE"
+        query = "SELECT Name, Email FROM Team WHERE isAskingForMatch = TRUE"
         cursor.execute(query)
         teams = cursor.fetchall()
         cursor.close()

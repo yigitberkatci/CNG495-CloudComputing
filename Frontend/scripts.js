@@ -120,7 +120,7 @@ async function loadMatchRequestTeams() {
 
             teams.forEach(team => {
                 const listItem = document.createElement('li');
-                listItem.textContent = team.Name;
+                listItem.innerHTML = `<strong>${team.Name}</strong> - ${team.Email}`;
                 teamList.appendChild(listItem);
             });
         } else {
