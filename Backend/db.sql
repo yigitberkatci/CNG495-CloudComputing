@@ -75,11 +75,11 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER UpdateTeamRating
+CREATE TRIGGER UpdateTeamRanking
 AFTER INSERT ON SoccerMatch
 FOR EACH ROW
 BEGIN
-    -- Update Team1's Rating
+    -- Update Team Rankings
     UPDATE Team t
     LEFT JOIN (
         SELECT
@@ -93,11 +93,11 @@ BEGIN
         WHERE sm.Score1 IS NOT NULL AND sm.Score2 IS NOT NULL
         GROUP BY t.TeamID
     ) win_stats ON t.TeamID = win_stats.TeamID
-    SET t.Rating = COALESCE(
-        ROUND(
+    SET t.Ranking = COALESCE(
+        GREATEST(1, LEAST(10, ROUND(
             (win_stats.MatchesWon * 100.0 / win_stats.MatchesPlayed)
             * win_stats.MatchesPlayed * 10, 2
-        ), 0)
+        ))), 1) -- Ensure Ranking is within 1 to 10
     WHERE t.TeamID IN (NEW.Team1ID, NEW.Team2ID);
 END $$
 

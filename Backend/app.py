@@ -210,8 +210,8 @@ def booking():
             return jsonify({"success": False, "error": "Team2 not found"}), 400
 
         # Get TimeSlot ID
-        query = "SELECT TimeSlotID FROM TimeSlot WHERE StartTime = %s"
-        cursor.execute(query, (start_time,))
+        query = "SELECT TimeSlotID FROM TimeSlot WHERE StartTime = %s AND Date = %s"
+        cursor.execute(query, (start_time, date))
         timeslotID = cursor.fetchone()
         if timeslotID:
             timeslotID = timeslotID[0]  # Extract value from tuple
@@ -233,11 +233,13 @@ def booking():
         # Insert into Match table
         query = "INSERT INTO SoccerMatch (Team1ID, Team2ID, Score1, Score2) VALUES (%s, %s, 0, 0)"
         cursor.execute(query, (team1ID, team2ID))
+        connection.commit()
         lastmatchID = cursor.lastrowid
 
         # Update timeSlot Table
         query = "UPDATE TimeSlot SET IsBooked = TRUE, MatchID = %s WHERE TimeSlotID = %s"
         cursor.execute(query, (lastmatchID, timeslotID))
+        connection.commit()
 
         # Insert into Notification table
         query = "INSERT INTO Notification (SenderID, ReceiverID, TimeSlotID, Message, Date, NotificationType) VALUES (%s, %s, %s, %s, %s, %s)"
