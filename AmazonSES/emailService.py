@@ -24,7 +24,6 @@ class emailService:
             <head></head>
             <body>
                 <h1>{match_details['team']} is looking for any match</h1>
-                <h4>Other Teams Looking for a Match are as Follows:</h4>
                 <p>
                     Please contact a team member if you want to play!<br>
                     Also don't for get to book the timeslot if you want to play!
