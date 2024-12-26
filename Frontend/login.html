@@ -28,7 +28,14 @@
               alert("Please fill in both fields.");
               return;
             }
-
+            //Check for admin login
+            if(email === "admin" && password === "admin123"){
+              alert("Admin login succesful!");
+              window.location.href = "adminPanel.html";
+              localStorage.setItem("loggedIn", true);
+              localStorage.setItem("loggedEmail", email)
+              return;
+            }
             try {
               const response = await fetch("http://127.0.0.1:5000/login", {
                 method: "POST",

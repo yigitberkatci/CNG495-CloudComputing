@@ -20,8 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
-
 //Getting current date function
 document.addEventListener('DOMContentLoaded', function () {
     var dt = new Date();
