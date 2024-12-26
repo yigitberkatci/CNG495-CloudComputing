@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65369a6a-bed1-458d-be00-143af3760ec2" name="Changes" comment="Looking for opponents fix">
+    <list default="true" id="65369a6a-bed1-458d-be00-143af3760ec2" name="Changes" comment="email service fix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Frontend/scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/scripts.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -110,7 +109,7 @@
       <workItem from="1734980009707" duration="3123000" />
       <workItem from="1735040775010" duration="24543000" />
       <workItem from="1735134543461" duration="1959000" />
-      <workItem from="1735159138607" duration="13277000" />
+      <workItem from="1735159138607" duration="15057000" />
     </task>
     <task id="LOCAL-00001" summary="Connection codes for Flask connection">
       <option name="closed" value="true" />
@@ -272,7 +271,23 @@
       <option name="project" value="LOCAL" />
       <updated>1735168491014</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Calender Bug Fix">
+      <option name="closed" value="true" />
+      <created>1735175311793</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1735175311793</updated>
+    </task>
+    <task id="LOCAL-00022" summary="email service fix">
+      <option name="closed" value="true" />
+      <created>1735216775747</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1735216775747</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -337,9 +352,11 @@
     <MESSAGE value="MyTeam button fix" />
     <MESSAGE value="Trigger added for ranking" />
     <MESSAGE value="Looking for opponents fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="Looking for opponents fix" />
+    <MESSAGE value="Calender Bug Fix" />
+    <MESSAGE value="email service fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="email service fix" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CNG495_CloudComputing$app.coverage" NAME="app Coverage Results" MODIFIED="1735175206881" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/CNG495_CloudComputing$app.coverage" NAME="app Coverage Results" MODIFIED="1735216830998" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
   </component>
 </project>

@@ -8,18 +8,37 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 //Logout Button
 document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("click", (event) => {
+        const logoutBtn = event.target.closest("#logout-btn");
+        if (logoutBtn) {
+            // Clear user session data
+            localStorage.removeItem("loggedIn");
+            localStorage.removeItem("loggedInEmail");
+
+            // Redirect to login page
+            window.location.href = "../Frontend/login.html"; // Adjust path as needed
+        }
+    });
+});
+
+/*
+document.addEventListener("DOMContentLoaded", () => {
     const logoutBtn = document.getElementById("logout-btn");
     if (logoutBtn) {
+        console.log("Logout button found in the DOM.");
         logoutBtn.addEventListener("click", () => {
             // Clear user session data
             localStorage.removeItem("loggedIn");
             localStorage.removeItem("loggedInEmail");
 
             // Redirect to login page
-            window.location.href = "login.html";
+            window.location.href = "./login.html";
+
         });
     }
 });
+
+ */
 //Getting current date function
 document.addEventListener('DOMContentLoaded', function () {
     var dt = new Date();
