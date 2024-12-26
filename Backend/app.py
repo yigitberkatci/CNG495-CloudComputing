@@ -1,10 +1,10 @@
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request
+
 from db_config import get_db_connection
 from hashlib import sha256
 from flask_cors import CORS
 from datetime import datetime
 from AmazonSES.emailService import emailService
-
 app = Flask(__name__)
 CORS(app)
 
@@ -12,7 +12,7 @@ CORS(app)
 def index():
     return "SoccerMatch Scheduler API is running!"
 
-@app.route('/timeslot', methods=['GET'])
+@app.route('/api/timeslot', methods=['GET'])
 def get_timeslot():
     try:
         connection = get_db_connection()
@@ -43,7 +43,7 @@ def get_timeslot():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-@app.route('/login', methods=['POST'])
+@app.route('/api/login', methods=['POST'])
 def login():
     try:
         data = request.get_json()
@@ -83,7 +83,7 @@ def login():
     except Exception as e:
         print(f"Error occurred: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
-@app.route('/register', methods=['POST'])
+@app.route('/api/register', methods=['POST'])
 def register():
     try:
         data = request.get_json()
@@ -127,7 +127,7 @@ def register():
         print(f"Error occurred during registration: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
 
-@app.route('/rankings', methods=['GET'])
+@app.route('/api/rankings', methods=['GET'])
 def get_rankings():
     try:
         connection = get_db_connection()
@@ -170,7 +170,7 @@ def get_rankings():
         return jsonify({"success": True, "data": rankings}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
-@app.route("/booking", methods=['POST'])
+@app.route("/api/booking", methods=['POST'])
 def booking():
     service = emailService()
     try:
@@ -286,7 +286,7 @@ def get_teams_asking_for_match():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
-@app.route('/ask-for-match', methods=['POST'])
+@app.route('/api/ask-for-match', methods=['POST'])
 def ask_for_match():
     try:
         # Get the email from the request data
@@ -356,7 +356,7 @@ def ask_for_match():
         if 'connection' in locals():
             connection.close()
 
-@app.route('/stop-asking-for-match', methods=['POST'])
+@app.route('/api/stop-asking-for-match', methods=['POST'])
 def stop_asking_for_match():
     try:
         # Get the email from the request data
@@ -605,7 +605,7 @@ def get_my_team():
 
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
-@app.route('/timeslot-date', methods=['GET'])
+@app.route('/api/timeslot-date', methods=['GET'])
 def timeslot_date():
     try:
         # Get the 'date' parameter or use today's date as default

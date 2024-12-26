@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', fetchTimeslotData);
 
 async function fetchTimeslotData() {
     try {
-        const response = await fetch('http://127.0.0.1:5000/timeslot'); // Update with your backend URL if different
+        const response = await fetch('http://127.0.0.1:5000/api/timeslot'); // Update with your backend URL if different
         const result = await response.json();
 
         if (result.success) {
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
   
       try {
-        const response = await fetch('http://127.0.0.1:5000/booking', {
+        const response = await fetch('http://127.0.0.1:5000/api/booking', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(bookingData),
@@ -232,7 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            const response = await fetch("http://127.0.0.1:5000/ask-for-match", {
+            const response = await fetch("http://127.0.0.1:5000/api/ask-for-match", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -263,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            const response = await fetch("http://127.0.0.1:5000/stop-asking-for-match", {
+            const response = await fetch("http://127.0.0.1:5000/api/stop-asking-for-match", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -288,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener('DOMContentLoaded', fetchLeagueTableData);
 async function fetchLeagueTableData() {
-    const response = await fetch('http://127.0.0.1:5000/rankings');
+    const response = await fetch('http://127.0.0.1:5000/api/rankings');
     const result = await response.json();
 
     if (result.success) {
@@ -631,7 +631,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Fetch and populate scheduler data
             try {
-                const response = await fetch(`http://127.0.0.1:5000/timeslot-date?date=${date}`);
+                const response = await fetch(`http://127.0.0.1:5000/api/timeslot-date?date=${date}`);
                 const result = await response.json();
 
                 if (result.success) {

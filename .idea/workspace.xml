@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="65369a6a-bed1-458d-be00-143af3760ec2" name="Changes" comment="Admin Timeslot Date added">
+    <list default="true" id="65369a6a-bed1-458d-be00-143af3760ec2" name="Changes" comment="League Table Admin excluded">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/scripts.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +113,7 @@
       <workItem from="1735040775010" duration="24543000" />
       <workItem from="1735134543461" duration="1959000" />
       <workItem from="1735159138607" duration="20640000" />
-      <workItem from="1735228053727" duration="1343000" />
+      <workItem from="1735228053727" duration="8117000" />
     </task>
     <task id="LOCAL-00001" summary="Connection codes for Flask connection">
       <option name="closed" value="true" />
@@ -328,7 +331,15 @@
       <option name="project" value="LOCAL" />
       <updated>1735228940858</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="League Table Admin excluded">
+      <option name="closed" value="true" />
+      <created>1735229485357</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1735229485357</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -373,7 +384,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Frontend directory/folder creation" />
     <MESSAGE value="Backend first commit" />
     <MESSAGE value="README update and SQL file added" />
     <MESSAGE value="README update and Reports added" />
@@ -398,9 +408,10 @@
     <MESSAGE value="Password fix" />
     <MESSAGE value="Admin login" />
     <MESSAGE value="Admin Timeslot Date added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Admin Timeslot Date added" />
+    <MESSAGE value="League Table Admin excluded" />
+    <option name="LAST_COMMIT_MESSAGE" value="League Table Admin excluded" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/CNG495_CloudComputing$app.coverage" NAME="app Coverage Results" MODIFIED="1735229182713" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
+    <SUITE FILE_PATH="coverage/CNG495_CloudComputing$app.coverage" NAME="app Coverage Results" MODIFIED="1735246554165" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Backend" />
   </component>
 </project>
