@@ -28,7 +28,18 @@ body {
     margin: 0;
     color: white;
 }
-
+.logout-btn {
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.logout-btn:hover{
+    text-decoration: underline;
+}
 .navbar {
     display: flex;
     justify-content: space-between;

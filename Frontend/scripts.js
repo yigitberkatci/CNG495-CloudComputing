@@ -6,6 +6,21 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "login.html";
     }
 });
+//Logout Button
+document.addEventListener("DOMContentLoaded", () => {
+    const logoutBtn = document.getElementById("logout-btn");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+            // Clear user session data
+            localStorage.removeItem("loggedIn");
+            localStorage.removeItem("loggedInEmail");
+
+            // Redirect to login page
+            window.location.href = "login.html";
+        });
+    }
+});
+
 
 //Getting current date function
 document.addEventListener('DOMContentLoaded', function () {
