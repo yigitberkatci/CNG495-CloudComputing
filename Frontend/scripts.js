@@ -505,6 +505,7 @@ async function loadTimeslots() {
                 const row = document.createElement('tr');
 
                 row.innerHTML = `
+                    <td>${timeslot.Date}</td>
                     <td>${timeslot.StartTime} - ${timeslot.EndTime}</td>
                     <td>${timeslot.IsBooked ? 'Booked' : 'Available'}</td>
                     <td>

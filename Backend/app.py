@@ -588,6 +588,7 @@ def get_timeslots():
         query = """
                     SELECT 
                         TimeSlotID,
+                        DATE_FORMAT(Date, '%Y-%m-%d') AS Date,
                         TIME_FORMAT(StartTime, '%H:%i:%s') AS StartTime,
                         TIME_FORMAT(EndTime, '%H:%i:%s') AS EndTime,
                         IsBooked
