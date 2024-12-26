@@ -522,3 +522,122 @@ async function deleteTimeslot(timeslotId) {
     }
 }
 
+//Calendar Page
+const daysTag = document.querySelector(".days"),
+currentDate = document.querySelector(".current-date"),
+prevNextIcon = document.querySelectorAll(".icons span");
+
+// getting new date, current year and month
+let date = new Date(),
+currYear = date.getFullYear(),
+currMonth = date.getMonth();
+
+// storing full name of all months in array
+const months = ["January", "February", "March", "April", "May", "June", "July",
+              "August", "September", "October", "November", "December"];
+
+const renderCalendar = () => {
+    let firstDayofMonth = new Date(currYear, currMonth, 1).getDay(), // getting first day of month
+    lastDateofMonth = new Date(currYear, currMonth + 1, 0).getDate(), // getting last date of month
+    lastDayofMonth = new Date(currYear, currMonth, lastDateofMonth).getDay(), // getting last day of month
+    lastDateofLastMonth = new Date(currYear, currMonth, 0).getDate(); // getting last date of previous month
+    let liTag = "";
+
+    for (let i = firstDayofMonth; i > 0; i--) { // creating li of previous month last days
+        liTag += `<li class="inactive">${lastDateofLastMonth - i + 1}</li>`;
+    }
+
+    for (let i = 1; i <= lastDateofMonth; i++) { // creating li of all days of current month
+        // adding active class to li if the current day, month, and year matched
+        let isToday = i === date.getDate() && currMonth === new Date().getMonth() 
+                     && currYear === new Date().getFullYear() ? "active" : "";
+        liTag += `<li class="${isToday}">${i}</li>`;
+    }
+
+    for (let i = lastDayofMonth; i < 6; i++) { // creating li of next month first days
+        liTag += `<li class="inactive">${i - lastDayofMonth + 1}</li>`
+    }
+    currentDate.innerText = `${months[currMonth]} ${currYear}`; // passing current mon and yr as currentDate text
+    daysTag.innerHTML = liTag;
+}
+renderCalendar();
+
+prevNextIcon.forEach(icon => { // getting prev and next icons
+    icon.addEventListener("click", () => { // adding click event on both icons
+        // if clicked icon is previous icon then decrement current month by 1 else increment it by 1
+        currMonth = icon.id === "prev" ? currMonth - 1 : currMonth + 1;
+
+        if(currMonth < 0 || currMonth > 11) { // if current month is less than 0 or greater than 11
+            // creating a new date of current year & month and pass it as date value
+            date = new Date(currYear, currMonth, new Date().getDate());
+            currYear = date.getFullYear(); // updating current year with new date year
+            currMonth = date.getMonth(); // updating current month with new date month
+        } else {
+            date = new Date(); // pass the current date as date value
+        }
+        renderCalendar(); // calling renderCalendar function
+    });
+});
+
+//Calendar popup functions
+document.addEventListener('DOMContentLoaded', () => {
+    const daysContainer = document.querySelector('.days');
+    const modal = document.getElementById('scheduler-popup');
+    const closeModal = modal.querySelector('.scheduler-close');
+    const popupDate = document.getElementById('scheduler-popup-date');
+    const schedulerBody = document.getElementById('popup-scheduler-body');
+
+    // Add click event listener to calendar days
+    daysContainer.addEventListener('click', async (event) => {
+        if (event.target.tagName === 'LI' && !event.target.classList.contains('inactive')) {
+            const day = event.target.innerText;
+            const date = `${currYear}-${String(currMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            
+            // Set the popup title
+            popupDate.innerText = date;
+
+            // Fetch and populate scheduler data
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/timeslot?date=${date}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    populateSchedulerTable(result.data);
+                } else {
+                    console.error('Failed to fetch timeslot data:', result.error);
+                }
+            } catch (error) {
+                console.error('Error fetching timeslot data:', error);
+            }
+
+            // Show the modal
+            modal.style.display = 'flex';
+        }
+    });
+
+    // Populate the scheduler table
+    function populateSchedulerTable(data) {
+        schedulerBody.innerHTML = '';
+        data.forEach(slot => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${slot.StartTime} - ${slot.EndTime}</td>
+                <td>${slot.Team1Name && slot.Team2Name ? `${slot.Team1Name} vs ${slot.Team2Name}` : 'Available'}</td>
+                <td>${slot.IsBooked ? '<button class="booked" disabled>Booked</button>' : '<button class="book-now">Book Now</button>'}</td>
+            `;
+            schedulerBody.appendChild(row);
+        });
+    }
+
+    // Close modal
+    closeModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    // Close modal when clicking outside content
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+});

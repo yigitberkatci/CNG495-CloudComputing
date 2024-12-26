@@ -649,5 +649,37 @@ if __name__ == '__main__':
 
 #MyTeam page
 
+#Calendar Page
+@app.route('/timeslot', methods=['GET'])
+def get_timeslot():
+    try:
+        date = request.args.get('date', datetime.now().strftime('%Y-%m-%d'))
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)
+
+        query = """
+            SELECT 
+                TIME_FORMAT(ts.StartTime, '%H:%i:%s') AS StartTime,
+                TIME_FORMAT(ts.EndTime, '%H:%i:%s') AS EndTime,
+                ts.IsBooked,
+                t1.Name AS Team1Name,
+                t2.Name AS Team2Name
+            FROM TimeSlot ts
+            LEFT JOIN SoccerMatch sm ON ts.MatchID = sm.MatchID
+            LEFT JOIN Team t1 ON sm.Team1ID = t1.TeamID
+            LEFT JOIN Team t2 ON sm.Team2ID = t2.TeamID
+            WHERE ts.Date = %s
+            ORDER BY ts.StartTime;
+        """
+        cursor.execute(query, (date,))
+        timeslots = cursor.fetchall()
+
+        cursor.close()
+        connection.close()
+
+        return jsonify({"success": True, "data": timeslots}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
 
 
