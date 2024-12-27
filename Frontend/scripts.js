@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', fetchTimeslotData);
 
 async function fetchTimeslotData() {
     try {
-        const response = await fetch('http://16.16.186.129/api/timeslot'); // Update with your backend URL if different
+        const response = await fetch('http://127.0.0.1:5000/api/timeslot'); // Update with your backend URL if different
         const result = await response.json();
 
         if (result.success) {
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 async function loadMatchRequestTeams() {
     try {
-        const response = await fetch('http://16.16.186.129/api/teams-asking-for-match');
+        const response = await fetch('http://127.0.0.1:5000/api/teams-asking-for-match');
         const result = await response.json();
 
         if (result.success) {
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
   
       try {
-        const response = await fetch('http://16.16.186.129/api/booking', {
+        const response = await fetch('http://127.0.0.1:5000/api/booking', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(bookingData),
@@ -232,7 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            const response = await fetch("http://16.16.186.129/api/ask-for-match", {
+            const response = await fetch("http://127.0.0.1:5000/api/ask-for-match", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -263,7 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         try {
-            const response = await fetch("http://16.16.186.129/api/stop-asking-for-match", {
+            const response = await fetch("http://127.0.0.1:5000/api/stop-asking-for-match", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -288,7 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener('DOMContentLoaded', fetchLeagueTableData);
 async function fetchLeagueTableData() {
-    const response = await fetch('http://16.16.186.129/api/rankings');
+    const response = await fetch('http://127.0.0.1:5000/api/rankings');
     const result = await response.json();
 
     if (result.success) {
@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', loadTeams);
 
 async function loadTeams() {
     try {
-        const response = await fetch('http://16.16.186.129/api/teams');
+        const response = await fetch('http://127.0.0.1:5000/api/teams');
         const result = await response.json();
 
         if (result.success) {
@@ -383,7 +383,7 @@ function attachTeamActions() {
 // Delete the team
 async function deleteTeam(teamId) {
     try {
-        const response = await fetch(`http://16.16.186.129/api/teams/${teamId}`, {
+        const response = await fetch(`http://127.0.0.1:5000/api/teams/${teamId}`, {
             method: 'DELETE',
         });
         const result = await response.json();
@@ -400,7 +400,7 @@ async function deleteTeam(teamId) {
 // Edit the team
 async function updateTeam(teamId, name, email) {
     try {
-        const response = await fetch(`http://16.16.186.129/api/teams/${teamId}`, {
+        const response = await fetch(`http://127.0.0.1:5000/api/teams/${teamId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, email }),
@@ -422,7 +422,7 @@ document.addEventListener('DOMContentLoaded', loadMatchScores);
 
 async function loadMatchScores() {
     try {
-        const response = await fetch('http://16.16.186.129/api/matches');
+        const response = await fetch('http://127.0.0.1:5000/api/matches');
         const result = await response.json();
 
         if (result.success) {
@@ -471,7 +471,7 @@ function attachSaveActions() {
 // Save the scores
 async function saveMatchScore(matchId, score1, score2) {
     try {
-        const response = await fetch(`http://16.16.186.129/api/matches/${matchId}`, {
+        const response = await fetch(`http://1127.0.0.1:5000/api/matches/${matchId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ score1, score2 }),
@@ -494,7 +494,7 @@ document.addEventListener('DOMContentLoaded', loadTimeslots);
 
 async function loadTimeslots() {
     try {
-        const response = await fetch('http://16.16.186.129/api/timeslots');
+        const response = await fetch('http://127.0.0.1:5000/api/timeslots');
         const result = await response.json();
 
         if (result.success) {
@@ -541,7 +541,7 @@ function attachTimeslotActions() {
 // Delete the timeslot
 async function deleteTimeslot(timeslotId) {
     try {
-        const response = await fetch(`http://16.16.186.129/api/timeslots/${timeslotId}`, {
+        const response = await fetch(`http://127.0.0.1:5000/api/timeslots/${timeslotId}`, {
             method: 'DELETE',
         });
         const result = await response.json();
@@ -631,7 +631,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Fetch and populate scheduler data
             try {
-                const response = await fetch(`http://16.16.186.129/api/timeslot-date?date=${date}`);
+                const response = await fetch(`http://127.0.0.1:5000/api/timeslot-date?date=${date}`);
                 const result = await response.json();
 
                 if (result.success) {

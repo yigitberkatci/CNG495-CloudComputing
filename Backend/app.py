@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request
-
 from db_config import get_db_connection
 from hashlib import sha256
 from flask_cors import CORS
@@ -13,7 +12,7 @@ def index():
     return "SoccerMatch Scheduler API is running!"
 
 @app.route('/api/timeslot', methods=['GET'])
-def get_timeslot():
+def timeslot():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)  #data as dictionary
@@ -128,7 +127,7 @@ def register():
         return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route('/api/rankings', methods=['GET'])
-def get_rankings():
+def rankings():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
@@ -164,12 +163,15 @@ def get_rankings():
         cursor.execute(query)
         rankings = cursor.fetchall()
 
-        cursor.close()
-        connection.close()
 
         return jsonify({"success": True, "data": rankings}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+    finally:
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
 @app.route("/api/booking", methods=['POST'])
 def booking():
     service = emailService()
@@ -178,17 +180,24 @@ def booking():
         team1email = data.get('team1')
         team2 = data.get('team2')
         timeslot = data.get('timeslot')
-        start_time, end_time = [time.strip() for time in timeslot.split('-')]
+
+        # Validate input data
+        if not timeslot or '-' not in timeslot:
+            return jsonify({"success": False, "error": "Invalid timeslot format. Expected 'StartTime - EndTime'"}), 400
+
+        # Safely unpack timeslot
+        try:
+            start_time, end_time = [time.strip() for time in timeslot.split('-')]
+        except ValueError:
+            return jsonify({"success": False, "error": "Error unpacking timeslot. Ensure the format is correct"}), 400
 
         now = datetime.now()
-
-        # Format the date and time
         date = now.strftime("%Y-%m-%d")  # Only the date
 
         connection = get_db_connection()
         cursor = connection.cursor()
 
-        # Get team name of logged in team
+        # Get team name of logged-in team
         query = "SELECT TeamID, Name FROM Team WHERE Email = %s"
         cursor.execute(query, (team1email,))
         result = cursor.fetchone()
@@ -202,22 +211,18 @@ def booking():
             "date": date,
             "time": timeslot,
             "team1": team1,
-            "team2": team2  # Optional for generalRequest
+            "team2": team2
         }
-
-        connection = get_db_connection()
-        cursor = connection.cursor()
 
         type = "specialRequest"
         msg = f"Team {team1} wants to play a match with your team!"
 
         # Get ID of second team
-
         query = "SELECT TeamID FROM Team WHERE Name = %s"
         cursor.execute(query, (team2,))
         team2ID = cursor.fetchone()
         if team2ID:
-            team2ID = team2ID[0]  # Extract value from tuple
+            team2ID = team2ID[0]
         else:
             return jsonify({"success": False, "error": "Team2 not found"}), 400
 
@@ -226,7 +231,7 @@ def booking():
         cursor.execute(query, (start_time, date))
         timeslotID = cursor.fetchone()
         if timeslotID:
-            timeslotID = timeslotID[0]  # Extract value from tuple
+            timeslotID = timeslotID[0]
         else:
             return jsonify({"success": False, "error": "Timeslot not found"}), 400
 
@@ -235,7 +240,7 @@ def booking():
         cursor.execute(query, (team2,))
         receiverEmail = cursor.fetchone()
         if receiverEmail:
-            receiverEmail = receiverEmail[0]  # Extract email value
+            receiverEmail = receiverEmail[0]
         else:
             return jsonify({"success": False, "error": "Receiver email not found"}), 400
 
@@ -248,16 +253,17 @@ def booking():
         connection.commit()
         lastmatchID = cursor.lastrowid
 
-        # Update timeSlot Table
+        # Update TimeSlot Table
         query = "UPDATE TimeSlot SET IsBooked = TRUE, MatchID = %s WHERE TimeSlotID = %s"
         cursor.execute(query, (lastmatchID, timeslotID))
         connection.commit()
 
         # Insert into Notification table
-        query = "INSERT INTO Notification (SenderID, ReceiverID, TimeSlotID, Message, Date, NotificationType) VALUES (%s, %s, %s, %s, %s, %s)"
+        query = """
+            INSERT INTO Notification (SenderID, ReceiverID, TimeSlotID, Message, Date, NotificationType)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """
         values = (team1ID, team2ID, timeslotID, msg, datetime.now(), type)
-
-        # Execute the final insert query
         cursor.execute(query, values)
         connection.commit()
 
@@ -267,11 +273,14 @@ def booking():
         print(f"Error occurred: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
     finally:
-        cursor.close()
-        connection.close()
+        if 'cursor' in locals():
+            cursor.close()
+        if 'connection' in locals():
+            connection.close()
+
 
 @app.route('/api/teams-asking-for-match', methods=['GET'])
-def get_teams_asking_for_match():
+def teams_asking_for_match():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
@@ -396,7 +405,7 @@ def stop_asking_for_match():
 #Admin Panel
 # 1. Load Teams
 @app.route('/api/teams', methods=['GET'])
-def get_teams():
+def teams():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
@@ -469,7 +478,7 @@ def update_team(team_id):
 
 # 4. Load Match Scores
 @app.route('/api/matches', methods=['GET'])
-def get_matches():
+def matches():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
@@ -529,7 +538,7 @@ def update_match_score(match_id):
 
 # 6. Load Timeslots
 @app.route('/api/timeslots', methods=['GET'])
-def get_timeslots():
+def timeslots():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(dictionary=True)
@@ -580,7 +589,7 @@ def delete_timeslot(timeslot_id):
             connection.close()
 
 @app.route('/api/myteam', methods=['POST'])
-def get_my_team():
+def myteam():
     try:
         data = request.get_json()
         user_email = data.get('email')
